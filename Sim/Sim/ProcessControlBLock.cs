@@ -18,7 +18,7 @@ namespace Sim
         public List<int> bursts;
         
         public Metadata log;
-        ProcessControlBLock(int submitTime, int _PID, List<int> _bursts)
+        public ProcessControlBLock(int submitTime, int _PID, List<int> _bursts)
 
         {
             PID = _PID;
