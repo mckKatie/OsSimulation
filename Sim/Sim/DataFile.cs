@@ -12,7 +12,9 @@ namespace Sim
 
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        SimManager simManager = new SimManager();
+        Dictionary<int, ProcessControlBLock> importantInfo = new Dictionary<int, ProcessControlBLock>();
+        List<Tuple<int, int>> submitTimes = new List<Tuple<int, int>>();
+
 
         /// <summary>
         /// make the data files for the program. Short sweet, to the point...datafile
@@ -54,6 +56,8 @@ namespace Sim
         /// </summary>
         public void getInfoFromFile()
         {
+            importantInfo.Clear();
+            submitTimes.Clear();
             string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
             foreach (string line in lines)
             {
@@ -73,8 +77,11 @@ namespace Sim
                     bursts.Add(Convert.ToInt32(difValues[i]));
                 }
 
-                ProcessControlBLock newProcess = new ProcessControlBLock(submitted,PID,bursts);
-
+                //////////// pid is stored twice, once in PCB and once in the dictionary
+                ///////////// might be able to remove it from PCB
+                ProcessControlBLock newProcess = new ProcessControlBLock(submitted,PID,bursts); 
+                importantInfo.Add(PID, newProcess);
+                submitTimes.Add(new Tuple<int,int>(submitted, PID));
 
             }
         }
