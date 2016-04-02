@@ -19,11 +19,11 @@ namespace Sim
                 dataInfo.getInfoFromFile();
 
                 /////////// FCFS
-                //RunFCFS(ref dataInfo, dataFiles);
+                RunFCFS(ref dataInfo, dataFiles, 1);
            
 
                 /////////// RR
-                RunRR(ref dataInfo, dataFiles);
+                RunRR(ref dataInfo, dataFiles, 1);
               
 
                 
@@ -31,9 +31,9 @@ namespace Sim
             }
         }
 
-        static public void RunFCFS(ref DataFile dataInfo, int dataFiles)
+        static public void RunFCFS(ref DataFile dataInfo, int dataFiles, int processors)
         {
-            FCFS algo1 = new FCFS(1);
+            FCFS algo1 = new FCFS(processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             algo1.RunSimulation();
 
@@ -42,9 +42,9 @@ namespace Sim
             runs.Add(newRun);
         }
 
-        static public void RunRR(ref DataFile dataInfo, int dataFiles)
+        static public void RunRR(ref DataFile dataInfo, int dataFiles, int processors)
         {
-            RR algo2 = new RR(1);
+            RR algo2 = new RR(processors);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             algo2.RunSimulation();
 
