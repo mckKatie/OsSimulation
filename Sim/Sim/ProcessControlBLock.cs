@@ -11,12 +11,12 @@ enum state {running, ready, io}
 
 namespace Sim
 {
-    public class ProcessControlBLock
+    class ProcessControlBLock
     {
         int PID;
         state currentState;
         public List<int> bursts;
-        public Metadata log;
+        Metadata log;
 
         ProcessControlBLock(int currentTime, int _PID, List<int> _bursts)
         {
