@@ -34,8 +34,8 @@ namespace Sim
         public void outputInfo(ref DataFile dataInfo)
         {
             getAverages(ref dataInfo);
-            Console.WriteLine("For datafile {0} and scheduling algorith {1}...", dataFileID, type);
-            Console.Write("Response Avgerage: \t{0}\nTurnaroundAvg: \t{1}\nStartAvg: \t{2}\nEndAVg: \t{3}\n",
+            Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
+            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n\n",
                 ResponseAvg, TurnAroundAvg, StartAvg, EndAvg);
         }
     }
