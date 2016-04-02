@@ -11,8 +11,12 @@ namespace Sim
     class DataFile
 
     {
+        string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        SimManager simManager = new SimManager();
+
         /// <summary>
         /// make the data files for the program. Short sweet, to the point...datafile
+        /// the order is PID, arrivalTime, then the bursts
         /// </summary>
         public void MakeDataFile()
         {
@@ -50,7 +54,29 @@ namespace Sim
         /// </summary>
         public void getInfoFromFile()
         {
+            string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
+            foreach (string line in lines)
+            {
+                string[] difValues = line.Split(' ');
+                
+                // for the PID
+                int PID = Convert.ToInt32(difValues[0]);
 
+                // for submitted time
+                int submitted = Convert.ToInt32(difValues[1]);
+
+                // for the burst times
+                List<int> bursts = new List<int>();
+                bursts.Clear();
+                for (int i = 2; i < difValues.Length; i++)
+                {
+                    bursts.Add(Convert.ToInt32(difValues[i]));
+                }
+
+                ProcessControlBLock newProcess = new ProcessControlBLock(submitted,PID,bursts);
+
+
+            }
         }
     }
 }
