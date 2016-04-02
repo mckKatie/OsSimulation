@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    public class Metadata
+    class Metadata
     {
         public int submitted;
         public int completed;

@@ -8,11 +8,13 @@ namespace Sim
 {
     abstract class SimManager
     {
-        int clock;
-        Dictionary<int, ProcessControlBLock> processes;
-        List<Tuple<int, int>> subTimes;
+
+        public int clock;
+        public Dictionary<int, ProcessControlBLock> processes;
+        public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
         List<Processor> processors;
+
 
 
         public void CheckProcessorStatus()
