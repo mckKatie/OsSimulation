@@ -16,6 +16,8 @@ namespace Sim
         public int wait;
         public int io;
 
+        public int timesSwapped;
+
         public int burstMarker;
 
         public Metadata(int submitTime)
@@ -24,6 +26,7 @@ namespace Sim
             execution = 0;
             wait = 0;
             io = 0;
+            timesSwapped = 0;
 
             response = -1;
 

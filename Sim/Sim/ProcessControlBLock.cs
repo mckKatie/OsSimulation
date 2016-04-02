@@ -56,6 +56,7 @@ namespace Sim
             int workDone = log.UpdateLog(currentState, currentTime);
             bursts[0] -= workDone;
             currentState = state.ready;
+            log.timesSwapped++;
         }
 
         public void IOFinish(int currentTime)
