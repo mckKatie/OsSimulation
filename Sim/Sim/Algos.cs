@@ -16,7 +16,7 @@ namespace Sim
             readyQueue = new Queue<int>();
         }
 
-        override public Tuple<int, int> ProcessOpenProcessor() // returns <PID, endAllocatedTime>
+        override public Tuple<int, int> ProcessOpenProcessor(int id) // returns <PID, endAllocatedTime> , takes processor id
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
@@ -37,27 +37,29 @@ namespace Sim
                 return true;
             return false;
         }
-        public override void MarkInterrupts() {}
+        public override void MarkInterrupts(int currentTime) {}
     }
 
     class RR : SimManager
     {
         Queue<int> readyQueue;
+        List<int> processorQuantumEnd;
         int quantum;
         RR(int numProcessors)
             : base(numProcessors)
         {
             quantum = 20;
             readyQueue = new Queue<int>();
+            processorQuantumEnd = new List<int>();
         }
-        override public Tuple<int, int> ProcessOpenProcessor()
+        override public Tuple<int, int> ProcessOpenProcessor(int id) //processor id
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
             ProcessControlBLock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
-           // int allocatedTime = Math.Min(burstTime, quantum);
+            processorQuantumEnd[id].Equals(quantum + clock);
             return new Tuple<int, int>(burstTime + clock, pid);
         }
         override public void ProcessReadyQueue(int PID)
@@ -70,9 +72,15 @@ namespace Sim
                 return true;
             return false;
         }
-        override public void MarkInterrupts()
+        override public void MarkInterrupts(int currentTime)
         {
-            
+            for(int i = 0; i < processors.Count; i++)
+            {
+                if(processorQuantumEnd[i] == currentTime)
+                {
+                    processors[i].InterruptProcess();
+                }
+            }
         }
     }
 
@@ -84,7 +92,7 @@ namespace Sim
         {
             readyList = new List<Tuple<int, int>>();
         }
-        override public Tuple<int, int> ProcessOpenProcessor()
+        override public Tuple<int, int> ProcessOpenProcessor(int id)
         {
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
@@ -106,7 +114,7 @@ namespace Sim
                 return true;
             return false;
         }
-        override public void MarkInterrupts() { }
+        override public void MarkInterrupts(int currentTime) { }
     }
 
     //class STR : SimManager

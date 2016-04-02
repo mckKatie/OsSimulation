@@ -49,6 +49,9 @@ namespace Sim
                 CheckForProcesses(IOList);
                 //check for completed processes, interrupt if necessary
                 CheckProcessorStatus();
+                MarkInterrupts(clock);
+                //handle interrupted processes
+                HandleInterrupts();
                 //submit new processes
                 CheckForProcesses(subTimes);
                 //assign to free processors
@@ -80,7 +83,7 @@ namespace Sim
             {
                 if(p.BurstCompleteCheck(clock)) // this will toggle processor status to stop if Burst Cmpleted
                 {
-                    int id = p.getID();
+                    int id = p.getPID();
                     ProcessControlBLock temp = getProcessByID(id);
                     temp.CPUFinish(clock);
                     if(temp.getState() == state.io)
@@ -136,7 +139,7 @@ namespace Sim
             {
                 if( p.getState() == Pstate.open && !ReadyQueueEmpty())
                 {
-                    p.AssignProcess(ProcessOpenProcessor());
+                    p.AssignProcess(ProcessOpenProcessor(p.getProcID()));
                 }
             }
         }
@@ -152,8 +155,7 @@ namespace Sim
 
         public void InterruptProcessor(Processor p) // changes processor state and has pcb execute interruption handling
         {
-            p.InterruptProcess();
-            int pid = p.getID();
+            int pid = p.getPID();
             ProcessControlBLock temp = getProcessByID(pid);
             temp.CPUInterrupt(clock);
             ProcessReadyQueue(pid); 
@@ -165,14 +167,15 @@ namespace Sim
                 if(p.getState() == Pstate.interrupted)
                 {
                     InterruptProcessor(p);
+                    p.SwapContexts();
                 }
             }
         }
 
         abstract public void ProcessReadyQueue(int PID);// pushes PID into ready queue, depends on strategy so will be overloaded in subclasses
         // this will need to set state of process
-        abstract public Tuple<int, int> ProcessOpenProcessor();//returns PID of process to get processor time
-        abstract public void MarkInterrupts();
+        abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
+        abstract public void MarkInterrupts(int currentTime);
         abstract public bool ReadyQueueEmpty();
     }
  

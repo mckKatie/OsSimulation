@@ -20,7 +20,8 @@ namespace Sim
             state = Pstate.open;
             processorID = id;
         }
-        public int getID(){ return PID; }
+        public int getPID(){ return PID; }
+        public int getProcID() { return processorID; }
         public Pstate getState(){ return state;}
         public bool BurstCompleteCheck(int currentTime)
         {
