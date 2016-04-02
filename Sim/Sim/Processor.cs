@@ -23,12 +23,14 @@ namespace Sim
 
         public int getID(){ return PID; }
         public Pstate getState(){ return state;}
-        public void CheckStatus(int currentTime)
+        public bool BurstCompleteCheck(int currentTime)
         {
             if (burstCompletionTime == currentTime)
             {
                 state = Pstate.stop;
+                return true;
             }
+            return false;
         }
 
         public void AssignProcess(Tuple<int, int> BurstCompletionTime_PID) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
