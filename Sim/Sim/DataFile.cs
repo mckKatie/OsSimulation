@@ -55,6 +55,7 @@ namespace Sim
         /// </summary>
         public void getInfoFromFile()
         {
+            MakeDataFile();
             importantInfo.Clear();
             submitTimes.Clear();
             string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
