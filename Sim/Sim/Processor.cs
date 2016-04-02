@@ -28,10 +28,10 @@ namespace Sim
             }
         }
 
-        public void AssignProcess(Tuple<int, int> PID_BurstCompletionTime) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
+        public void AssignProcess(Tuple<int, int> BurstCompletionTime_PID) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
         {
-            PID = PID_BurstCompletionTime.Item1;
-            burstCompletionTime = PID_BurstCompletionTime.Item2;
+            PID = BurstCompletionTime_PID.Item2;
+            burstCompletionTime = BurstCompletionTime_PID.Item1;
             state = Pstate.busy;
         }
         public void SwapContexts()
