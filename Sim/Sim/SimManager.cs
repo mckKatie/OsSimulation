@@ -14,6 +14,16 @@ namespace Sim
         public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
         List<Processor> processors;
+        public int numProcessors;
+
+
+        public SimManager()
+        {
+            for(int i = 0; i < numProcessors; i++)
+            {
+                processors.Add(new Processor());
+            }
+        }
 
         public void RunSimulation()
         {
