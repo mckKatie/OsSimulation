@@ -8,8 +8,12 @@ namespace Sim
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            DataFile dataInfo = new DataFile();
+            dataInfo.getInfoFromFile();
+
         }
     }
 }
