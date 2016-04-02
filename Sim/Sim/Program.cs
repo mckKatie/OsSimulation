@@ -13,7 +13,10 @@ namespace Sim
         {
             DataFile dataInfo = new DataFile();
             dataInfo.getInfoFromFile();
-
+            FCFS algo1 = new FCFS(1);
+            algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            algo1.RunSimulation();
+            Analysis.DisplayAverages(dataInfo.getDictionary());
         }
     }
 }

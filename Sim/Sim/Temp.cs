@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Sim
 {
-    class Analysis
+    static class Analysis
     {
         /// <summary>
         /// returns the turnaround time for a specific process
@@ -15,7 +15,7 @@ namespace Sim
         /// <param name="arrival"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public int turnaroundTime(int arrival, int endTime)
+        public static int turnaroundTime(int arrival, int endTime)
         {
             int turnaroundTime = endTime - arrival;
             return turnaroundTime;
@@ -26,7 +26,7 @@ namespace Sim
         /// </summary>
         /// <param name="logList"></param>
         /// <returns></returns>
-        public double AverageStartTime(List<Metadata> logList)
+        public static double AverageStartTime(List<Metadata> logList)
         {
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
@@ -42,7 +42,7 @@ namespace Sim
         /// </summary>
         /// <param name="logList"></param>
         /// <returns></returns>
-        public double AverageEndTime(List<Metadata> logList)
+        public static double AverageEndTime(List<Metadata> logList)
         {
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
@@ -59,7 +59,7 @@ namespace Sim
         /// </summary>
         /// <param name="logList"></param>
         /// <returns></returns>
-        public double AverageTurnaroundTime(List<Metadata> logList)
+        public static double AverageTurnaroundTime(List<Metadata> logList)
         {
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
@@ -76,7 +76,7 @@ namespace Sim
         /// </summary>
         /// <param name="logList"></param>
         /// <returns></returns>
-        public double AverageResponseTime(List<Metadata> logList)
+        public static double AverageResponseTime(List<Metadata> logList)
         {
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
@@ -109,7 +109,7 @@ namespace Sim
         /// function that computes and outputs all results of simulation
         /// </summary>
         /// <param name="logInfo"></param>
-        public void DisplayAverages(Dictionary<int, ProcessControlBLock> logInfo)
+        public static void DisplayAverages(Dictionary<int, ProcessControlBLock> logInfo)
         {
             List<KeyValuePair<int, ProcessControlBLock>> temp = new List<KeyValuePair<int, ProcessControlBLock>>();
             temp.Clear();
