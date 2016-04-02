@@ -20,8 +20,7 @@ namespace Sim
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
-            ProcessControlBLock temp;
-            processes.TryGetValue(pid, out temp);
+            ProcessControlBLock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
             return new Tuple<int, int>(burstTime + clock, pid);
@@ -47,8 +46,7 @@ namespace Sim
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
-            ProcessControlBLock temp;
-            processes.TryGetValue(pid, out temp);
+            ProcessControlBLock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
             int allocatedTime = Math.Min(burstTime, quantum);
@@ -72,9 +70,38 @@ namespace Sim
         {
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
-            ProcessControlBLock temp;
-            processes.TryGetValue(processData.Item2, out temp);
+            ProcessControlBLock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
+            return processData;
+        }
+
+        public void ProcessReadyQueue(int PID)
+        {
+            ProcessControlBLock temp = getProcessByID(PID);
+            int burstTime = temp.getNextBurst();
+            readyList.Add(new Tuple<int, int>(burstTime, PID));
+            readyList.Sort();
+        }
+    }
+
+    class STR : SimManager
+    {
+        List<Tuple<int, int>> readyList; //burstTime, PID
+        STR() : base()
+        {
+            numProcessors = 1;
+            readyList = new List<Tuple<int, int>>();
+        }
+        public Tuple<int, int> ProcessOpenProcessor()
+        {
+
+        }
+        public void ProcessReadyQueue(int PID)
+        {
+            ProcessControlBLock temp = getProcessByID(PID);
+            int burstTime = temp.getNextBurst();
+            readyList.Add(new Tuple<int, int>(burstTime, PID));
+            readyList.Sort();
         }
     }
 }
