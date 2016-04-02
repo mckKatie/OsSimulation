@@ -4,18 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-enum Pstate { busy, open, stop, swapping}
+public enum Pstate { busy, open, stop, swapping}
+
 
 namespace Sim
 {
     public class Processor
     {
         Pstate state;
+        int processorID;
         int PID;
         int burstCompletionTime; // either because burst is completed or quantum reached
 
-        public Processor(){
+        public Processor(int id){
             state = Pstate.open;
+            processorID = id;
         }
 
         public int getID(){ return PID; }

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 
 
-enum state {running, ioready, io, ready}
+public enum state {running, ioready, io, ready}
 
 namespace Sim
 {
-    class ProcessControlBLock
+    public class ProcessControlBLock
     {
         int PID;
         state currentState;

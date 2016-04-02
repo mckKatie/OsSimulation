@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    class FCFS : SimManager
+    public class FCFS : SimManager
     {
         Queue<int> readyQueue;
 
-        FCFS() : base()
+        public FCFS(int numProcessors)
+            : base(numProcessors)
         {
-            numProcessors = 1;
             readyQueue = new Queue<int>();
         }
 
-        public Tuple<int, int> ProcessOpenProcessor() // returns <PID, endAllocatedTime>
+        override public Tuple<int, int> ProcessOpenProcessor() // returns <PID, endAllocatedTime>
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
@@ -26,23 +26,31 @@ namespace Sim
             return new Tuple<int, int>(burstTime + clock, pid);
         }
 
-        public void ProcessReadyQueue(int PID)
+        override public void ProcessReadyQueue(int PID)
         {
             readyQueue.Enqueue(PID);
         }
+
+        override public bool ReadyQueueEmpty()
+        {
+            if (readyQueue.Count == 0)
+                return true;
+            return false;
+        }
+
     }
 
     class RR : SimManager
     {
         Queue<int> readyQueue;
         int quantum;
-        RR() : base()
+        RR(int numProcessors)
+            : base(numProcessors)
         {
-            numProcessors = 1;
             quantum = 20;
             readyQueue = new Queue<int>();
         }
-        public Tuple<int, int> ProcessOpenProcessor()
+        override public Tuple<int, int> ProcessOpenProcessor()
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
@@ -52,21 +60,27 @@ namespace Sim
             int allocatedTime = Math.Min(burstTime, quantum);
             return new Tuple<int, int>(allocatedTime + clock, pid);
         }
-        public void ProcessReadyQueue(int PID)
+        override public void ProcessReadyQueue(int PID)
         {
             readyQueue.Enqueue(PID);
+        }
+        override public bool ReadyQueueEmpty()
+        {
+            if (readyQueue.Count == 0)
+                return true;
+            return false;
         }
     }
 
     class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        SPN() : base()
+        SPN(int numProcessors)
+            : base(numProcessors)
         {
-            numProcessors = 1;
             readyList = new List<Tuple<int, int>>();
         }
-        public Tuple<int, int> ProcessOpenProcessor()
+        override public Tuple<int, int> ProcessOpenProcessor()
         {
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
@@ -75,33 +89,46 @@ namespace Sim
             return processData;
         }
 
-        public void ProcessReadyQueue(int PID)
+        override public void ProcessReadyQueue(int PID)
         {
             ProcessControlBLock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
             readyList.Add(new Tuple<int, int>(burstTime, PID));
             readyList.Sort();
         }
-    }
-
-    class STR : SimManager
-    {
-        List<Tuple<int, int>> readyList; //burstTime, PID
-        STR() : base()
+        override public bool ReadyQueueEmpty()
         {
-            numProcessors = 1;
-            readyList = new List<Tuple<int, int>>();
-        }
-        public Tuple<int, int> ProcessOpenProcessor()
-        {
-
-        }
-        public void ProcessReadyQueue(int PID)
-        {
-            ProcessControlBLock temp = getProcessByID(PID);
-            int burstTime = temp.getNextBurst();
-            readyList.Add(new Tuple<int, int>(burstTime, PID));
-            readyList.Sort();
+            if (readyList.Count == 0)
+                return true;
+            return false;
         }
     }
+
+    //class STR : SimManager
+    //{
+    //    List<Tuple<int, int>> readyList; //burstTime, PID
+    //    STR() : base()
+    //    {
+    //        numProcessors = 1;
+    //        readyList = new List<Tuple<int, int>>();
+    //    }
+    //    override public Tuple<int, int> ProcessOpenProcessor()
+    //    {
+
+    //    }
+    //    override public void ProcessReadyQueue(int PID)
+    //    {
+    //        ProcessControlBLock temp = getProcessByID(PID);
+    //        int burstTime = temp.getNextBurst();
+    //        readyList.Add(new Tuple<int, int>(burstTime, PID));
+    //        readyList.Sort();
+    //    }
+    //    //public void CheckToReplaceProcess()
+    //    //{
+    //    //    foreach (Processor p in processors)
+    //    //    {
+    //    //        if
+    //    //    }
+    //    //}
+    //}
 }

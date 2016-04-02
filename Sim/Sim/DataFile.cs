@@ -14,7 +14,14 @@ namespace Sim
         Dictionary<int, ProcessControlBLock> importantInfo = new Dictionary<int, ProcessControlBLock>();
         List<Tuple<int, int>> submitTimes = new List<Tuple<int, int>>();
 
-
+        public Dictionary<int, ProcessControlBLock> getDictionary()
+        {
+            return importantInfo;
+        }
+        public List<Tuple<int, int>> getSubTimes()
+        {
+            return submitTimes;
+        }
         /// <summary>
         /// make the data files for the program. Short sweet, to the point...datafile
         /// the order is PID, arrivalTime, then the bursts
@@ -72,7 +79,7 @@ namespace Sim
                 // for the burst times
                 List<int> bursts = new List<int>();
                 bursts.Clear();
-                for (int i = 2; i < difValues.Length; i++)
+                for (int i = 2; i < difValues.Length - 1; i++)
                 {
                     bursts.Add(Convert.ToInt32(difValues[i]));
                 }
@@ -82,6 +89,13 @@ namespace Sim
                 ProcessControlBLock newProcess = new ProcessControlBLock(submitted,PID,bursts); 
                 importantInfo.Add(PID, newProcess);
                 submitTimes.Add(new Tuple<int,int>(submitted, PID));
+
+                Console.Write("Pid: {0}, submitted: {1}, bursts: ", PID, submitted);
+                foreach (int b in bursts)
+                {
+                    Console.Write(b + " ");
+                }
+                Console.Write("\n");
 
             }
         }
