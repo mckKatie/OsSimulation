@@ -9,7 +9,6 @@ using System.IO;
 namespace Sim
 {
     class DataFile
-
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         Dictionary<int, ProcessControlBLock> importantInfo = new Dictionary<int, ProcessControlBLock>();
@@ -85,5 +84,6 @@ namespace Sim
 
             }
         }
+
     }
 }
