@@ -14,7 +14,20 @@ namespace Sim
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
         List<Processor> processors;
 
+        public void RunSimulation()
+        {
+            //increment clock
+            clock++;
+            //finish io
+            CheckForProcesses(IOList);
+            //check for completed processes, interrupt if necessary
+            CheckProcessorStatus();
+            //submit new processes
+            CheckForProcesses(subTimes);
+            //assign to free processors
+            AssignFreeProcessors();
 
+        }
         public void CheckProcessorStatus()
         {
             foreach (Processor p in processors)
@@ -48,14 +61,14 @@ namespace Sim
                 }
             }
         }
-        public void CheckIOStatus() //check procList for processes ready to be placed in wait queue
+        public void CheckForProcesses(List<Tuple<int, int>> procList) //check procList for processes ready to be placed in wait queue
         {
             while(true)
             {
-                if(IOList[0].Item1 == clock)
+                if(procList[0].Item1 == clock)
                 {
-                    ProcessReadyQueue(IOList[0].Item2);
-                    IOList.RemoveAt(0);
+                    ProcessReadyQueue(procList[0].Item2);
+                    procList.RemoveAt(0);
                     continue;
                 }
                 break;
