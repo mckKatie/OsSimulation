@@ -4,34 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-enum Pstate { busy, open, stop, swapping}
+public enum Pstate { busy, open, stop, swapping, interrupted}
+
 
 namespace Sim
 {
-    class Processor
+    public class Processor
     {
         Pstate state;
+        int processorID;
         int PID;
         int burstCompletionTime; // either because burst is completed or quantum reached
 
-        Processor(){
+        public Processor(int id){
             state = Pstate.open;
+            processorID = id;
         }
-
-        public int getID(){ return PID; }
+        public int getPID(){ return PID; }
+        public int getProcID() { return processorID; }
         public Pstate getState(){ return state;}
-        public void CheckStatus(int currentTime)
+        public int getCompletionTime() { return burstCompletionTime; }
+        public bool BurstCompleteCheck(int currentTime)
         {
             if (burstCompletionTime == currentTime)
             {
                 state = Pstate.stop;
+                return true;
             }
+            return false;
         }
-
-        public void AssignProcess(Tuple<int, int> PID_BurstCompletionTime) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
+        public void AssignProcess(Tuple<int, int> BurstCompletionTime_PID) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
         {
-            PID = PID_BurstCompletionTime.Item1;
-            burstCompletionTime = PID_BurstCompletionTime.Item2;
+            PID = BurstCompletionTime_PID.Item2;
+            burstCompletionTime = BurstCompletionTime_PID.Item1;
             state = Pstate.busy;
         }
         public void SwapContexts()
@@ -41,6 +46,10 @@ namespace Sim
         public void FreeProcessor()
         {
             state = Pstate.open;
+        }
+        public void InterruptProcess()
+        {
+            state = Pstate.interrupted;
         }
     }
 }

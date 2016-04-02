@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 
 
-enum state {running, ioready, io, ready}
+public enum state {running, finished, io, ready}
 
 namespace Sim
 {
-    class ProcessControlBLock
+    public class ProcessControlBLock
     {
         int PID;
         state currentState;
         public List<int> bursts;
         
         public Metadata log;
-        ProcessControlBLock(int submitTime, int _PID, List<int> _bursts)
+        public ProcessControlBLock(int submitTime, int _PID, List<int> _bursts)
 
         {
             PID = _PID;
@@ -42,7 +42,13 @@ namespace Sim
         {
             log.UpdateLog(currentState, currentTime);
             bursts.RemoveAt(0);
-            currentState = state.ioready;
+            if(bursts.Count == 0)
+            {
+                currentState = state.finished;
+                Terminate(currentTime);
+            }
+            else
+                currentState = state.io;
         }
 
         public void CPUInterrupt(int currentTime)
@@ -50,13 +56,25 @@ namespace Sim
             int workDone = log.UpdateLog(currentState, currentTime);
             bursts[0] -= workDone;
             currentState = state.ready;
+            log.timesSwapped++;
         }
 
         public void IOFinish(int currentTime)
         {
             log.UpdateLog(currentState, currentTime);
             bursts.RemoveAt(0);
-            currentState = state.ready;
+            if(bursts.Count == 0)
+            {
+                currentState = state.finished;
+                Terminate(currentTime);
+            }
+            else
+                currentState = state.ready;
+        }
+
+        private void Terminate(int currentTime)    //compute final values
+        {
+            log.setCompleted(currentTime);
         }
     }
 }

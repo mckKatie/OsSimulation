@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    class Metadata
+    public class Metadata
     {
         public int submitted;
         public int completed;
@@ -16,6 +16,8 @@ namespace Sim
         public int wait;
         public int io;
 
+        public int timesSwapped;
+
         public int burstMarker;
 
         public Metadata(int submitTime)
@@ -24,6 +26,7 @@ namespace Sim
             execution = 0;
             wait = 0;
             io = 0;
+            timesSwapped = 0;
 
             response = -1;
 
@@ -65,6 +68,13 @@ namespace Sim
         {
             response = currentTime - submitted;
         }
-
+        public void setCompleted(int currentTime)
+        {
+            completed = currentTime;
+        }
+        public int getCompleted()
+        {
+            return completed;
+        }
     }
 }
