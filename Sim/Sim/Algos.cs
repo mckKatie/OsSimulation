@@ -45,12 +45,16 @@ namespace Sim
         Queue<int> readyQueue;
         List<int> processorQuantumEnd;
         int quantum;
-        RR(int numProcessors)
+        public RR(int numProcessors)
             : base(numProcessors)
         {
             quantum = 20;
             readyQueue = new Queue<int>();
             processorQuantumEnd = new List<int>();
+            for(int i = 0; i < processors.Count; i++ )
+            {
+                processorQuantumEnd.Add(0);
+            }
         }
         override public Tuple<int, int> ProcessOpenProcessor(int id) //processor id
         {
