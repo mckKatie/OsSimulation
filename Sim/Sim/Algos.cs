@@ -70,6 +70,11 @@ namespace Sim
                 return true;
             return false;
         }
+        override public void CheckForInterrupts()
+        {
+            ProcessReadyQueue(id); // need logic in PCB to adjust bursts vec
+
+        }
     }
 
     class SPN : SimManager
