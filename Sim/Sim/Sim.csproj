@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algos.cs" />
+    <Compile Include="DataFile.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="ProcessControlBLock.cs" />
     <Compile Include="Processor.cs" />
