@@ -121,31 +121,59 @@ namespace Sim
         override public void MarkInterrupts(int currentTime) { }
     }
 
-    //class STR : SimManager
-    //{
-    //    List<Tuple<int, int>> readyList; //burstTime, PID
-    //    STR() : base()
-    //    {
-    //        numProcessors = 1;
-    //        readyList = new List<Tuple<int, int>>();
-    //    }
-    //    override public Tuple<int, int> ProcessOpenProcessor()
-    //    {
+    public class STR : SimManager
+    {
+        List<Tuple<int, int>> readyList; //burstTime, PID
 
-    //    }
-    //    override public void ProcessReadyQueue(int PID)
-    //    {
-    //        ProcessControlBLock temp = getProcessByID(PID);
-    //        int burstTime = temp.getNextBurst();
-    //        readyList.Add(new Tuple<int, int>(burstTime, PID));
-    //        readyList.Sort();
-    //    }
-    //    //public void CheckToReplaceProcess()
-    //    //{
-    //    //    foreach (Processor p in processors)
-    //    //    {
-    //    //        if
-    //    //    }
-    //    //}
-    //}
+        STR(int numProcessors) : base(numProcessors)
+        {
+            readyList = new List<Tuple<int, int>>();
+        }
+        override public Tuple<int, int> ProcessOpenProcessor(int id) //returns <PID, endAllocatedTime> , takes processor id
+        {
+            Tuple<int, int> processData = readyList.First();
+            readyList.RemoveAt(0);
+            ProcessControlBLock temp = getProcessByID(processData.Item2);
+            temp.ProcessorInitiate(clock);
+            return processData;
+        }
+        override public void ProcessReadyQueue(int PID)
+        {
+            ProcessControlBLock temp = getProcessByID(PID);
+            int burstTime = temp.getNextBurst();
+            readyList.Add(new Tuple<int, int>(burstTime, PID));
+            readyList.Sort();
+        }
+        override public bool ReadyQueueEmpty()
+        {
+            if (readyList.Count == 0)
+                return true;
+            return false;
+        }
+        override public void MarkInterrupts(int currentTime)
+        {
+            List<int> completionTimes = new List<int>();
+            foreach (Processor p in processors)
+            {
+                if (p.getState() == Pstate.busy)
+                {
+                    completionTimes.Add(p.getCompletionTime());
+                }
+            }
+            for(int i = 0; i < processors.Count && readyList.Count > i; i++)
+            {
+                completionTimes.Add(readyList[i].Item1 + currentTime);
+            }
+            completionTimes.Sort();
+            int interruptMarker = completionTimes[processors.Count - 1];
+            foreach (Processor p in processors)
+            {
+                if (p.getCompletionTime() > interruptMarker)
+                {
+                    p.InterruptProcess();
+                }
+            }
+
+        }
+    }
 }
