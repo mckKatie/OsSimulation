@@ -13,17 +13,30 @@ namespace Sim
         {
             List<Run> runs = new List<Run>();
             int dataFiles = 1;
-            while (dataFiles != 0)
+            while (dataFiles > 0)
             {
-                Run newRun = new Run("FCFS", dataFiles);
                 DataFile dataInfo = new DataFile();
                 dataInfo.getInfoFromFile();
+
+                /////////// FCFS
                 FCFS algo1 = new FCFS(1);
                 algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
                 algo1.RunSimulation();
+
+                Run newRun = new Run("FCFS", dataFiles);
                 newRun.outputInfo(ref dataInfo);
                 runs.Add(newRun);
-                //Analysis.DisplayAverages(dataInfo.getDictionary());
+
+                /////////// RR
+                RR algo2 = new RR(1);
+                algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+                algo2.RunSimulation();
+
+                Run newRun2 = new Run("RR", dataFiles);
+                newRun.outputInfo(ref dataInfo);
+                runs.Add(newRun2);
+
+                
                 dataFiles--;
             }
         }
