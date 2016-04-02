@@ -13,7 +13,7 @@ namespace Sim
         public Dictionary<int, ProcessControlBLock> processes;
         public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
-        List<Processor> processors;
+        public List<Processor> processors;
         public int numProcessors;
 
 
@@ -46,7 +46,12 @@ namespace Sim
 
 
         }
-
+        public ProcessControlBLock getProcessByID(int pid)
+        {
+            ProcessControlBLock temp;
+            processes.TryGetValue(pid, out temp);
+            return temp;
+        }
         public void CheckProcessorStatus()
         {
             foreach (Processor p in processors)
@@ -55,8 +60,7 @@ namespace Sim
                 if(p.getState() == Pstate.stop)
                 {
                     int id = p.getID();
-                    ProcessControlBLock temp;
-                    processes.TryGetValue(id, out temp);
+                    ProcessControlBLock temp = getProcessByID(id);
                     if (temp.getState() == state.ioready)   //if burst finished (need to have logic about finishing in PCB)
                     {
                         StartIO(id);
@@ -96,8 +100,7 @@ namespace Sim
 
         public void StartIO(int PID) // looks up processes and places id and time of io completion into list, then sorts
         {
-            ProcessControlBLock temp;
-            processes.TryGetValue(PID, out temp);
+            ProcessControlBLock temp = getProcessByID(PID);
             int burstDuration = temp.getNextBurst();
             int burstCompletionTime = clock + burstDuration;
 
