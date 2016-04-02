@@ -8,13 +8,13 @@ enum Pstate { busy, open, stop, swapping}
 
 namespace Sim
 {
-    class Processor
+    public class Processor
     {
         Pstate state;
         int PID;
         int burstCompletionTime; // either because burst is completed or quantum reached
 
-        Processor(){
+        public Processor(){
             state = Pstate.open;
         }
 

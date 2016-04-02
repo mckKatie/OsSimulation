@@ -6,27 +6,35 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    class RoundRobin : SimManager
+    class FCFS : SimManager
     {
-        int quantumSwitch;
-        int quantum = 20;
+        Queue<int> readyQueue;
 
-        int getQuantum()
+
+
+
+        FCFS() : base()
         {
-            return quantum;
+            numProcessors = 1;
+            readyQueue = new Queue<int>();
         }
 
-        void setQuantum(int x)
+        public Tuple<int, int> ProcessOpenProcessor() // returns <PID, endAllocatedTime>
         {
-            quantum = x;
-        }
-
-        void run()
-        {
-            int quantumSwitch = clock + quantum;
+            int pid = readyQueue.First();
+            readyQueue.Dequeue();
             ProcessControlBLock temp;
-            processes.TryGetValue(0, out temp);
-
+            processes.TryGetValue(pid, out temp);
+            int burstTime = temp.getNextBurst();
+            return new Tuple<int, int>(pid, burstTime+clock);
         }
+
+        public void ProcessReadyQueue(int PID)
+        {
+            readyQueue.Enqueue(PID);
+        }
+
+
+        
     }
 }
