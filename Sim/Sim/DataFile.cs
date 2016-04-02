@@ -9,7 +9,11 @@ using System.IO;
 namespace Sim
 {
     class DataFile
+
     {
+        /// <summary>
+        /// make the data files for the program. Short sweet, to the point...datafile
+        /// </summary>
         public void MakeDataFile()
         {
 
@@ -36,6 +40,16 @@ namespace Sim
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Info is stored in PCB, it's constructor asks for all 
+        /// the info.  Then all the PCB's are stored into a dictionary
+        /// with the PID as the key.
+        /// Lastly, this function makes the pairs for the ready queue of the submit times and the PID
+        /// </summary>
+        public void getInfoFromFile()
+        {
 
         }
     }
