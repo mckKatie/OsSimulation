@@ -18,16 +18,16 @@ namespace Sim
 
         public int burstMarker;
 
-        public Metadata(int currentTime)
+        public Metadata(int submitTime)
         {
-            submitted = currentTime;
+            submitted = submitTime;
             execution = 0;
             wait = 0;
             io = 0;
 
             response = -1;
 
-            burstMarker = currentTime;
+            burstMarker = submitted;
         }
 
         public int UpdateLog(state currentState, int currentTime)
@@ -47,17 +47,13 @@ namespace Sim
             {
                 io += prevBurstDuration;
             }
-            return prevBurstDuration; // add an error report
+            return prevBurstDuration; 
         }
 
         private int getDuration(int currentTime)
         {
             return currentTime - burstMarker;
         }
-
-
-
-
 
 
 
