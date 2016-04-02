@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 
 
-public enum state {running, ioready, io, ready}
+public enum state {running, finished, io, ready}
 
 namespace Sim
 {
@@ -42,7 +42,13 @@ namespace Sim
         {
             log.UpdateLog(currentState, currentTime);
             bursts.RemoveAt(0);
-            currentState = state.ioready;
+            if(bursts.Count == 0)
+            {
+                currentState = state.finished;
+                Terminate(currentTime);
+            }
+            else
+                currentState = state.io;
         }
 
         public void CPUInterrupt(int currentTime)
@@ -56,7 +62,18 @@ namespace Sim
         {
             log.UpdateLog(currentState, currentTime);
             bursts.RemoveAt(0);
-            currentState = state.ready;
+            if(bursts.Count == 0)
+            {
+                currentState = state.finished;
+                Terminate(currentTime);
+            }
+            else
+                currentState = state.ready;
+        }
+
+        private void Terminate(int currentTime)    //compute final values
+        {
+            log.setCompleted(currentTime);
         }
     }
 }

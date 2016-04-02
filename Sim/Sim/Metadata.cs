@@ -65,6 +65,13 @@ namespace Sim
         {
             response = currentTime - submitted;
         }
-
+        public void setCompleted(int currentTime)
+        {
+            completed = currentTime;
+        }
+        public int getCompleted()
+        {
+            return completed;
+        }
     }
 }
