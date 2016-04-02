@@ -8,6 +8,11 @@ using System.IO;
 
 namespace Sim
 {
+    class Run
+    {
+        int runID;
+
+    }
     class DataFile
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

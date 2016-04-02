@@ -20,7 +20,6 @@ namespace Sim
             state = Pstate.open;
             processorID = id;
         }
-
         public int getID(){ return PID; }
         public Pstate getState(){ return state;}
         public void CheckStatus(int currentTime)
@@ -30,7 +29,6 @@ namespace Sim
                 state = Pstate.stop;
             }
         }
-
         public void AssignProcess(Tuple<int, int> BurstCompletionTime_PID) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
         {
             PID = BurstCompletionTime_PID.Item2;
