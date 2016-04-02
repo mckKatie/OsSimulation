@@ -23,6 +23,7 @@ namespace Sim
         public int getPID(){ return PID; }
         public int getProcID() { return processorID; }
         public Pstate getState(){ return state;}
+        public int getCompletionTime() { return burstCompletionTime; }
         public bool BurstCompleteCheck(int currentTime)
         {
             if (burstCompletionTime == currentTime)
