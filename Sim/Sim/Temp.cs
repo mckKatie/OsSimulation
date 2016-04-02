@@ -93,17 +93,17 @@ namespace Sim
         /// </summary>
         /// <param name="logList"></param>
         /// <returns></returns>
-        //public double AverageContactSwitchTime(List<Metadata> logList)
-        //{
-        //    double average = 0;
-        //    for (int i = 0; i < logList.Count; i++)
-        //    {
-        //        double turn = System.Convert.ToDouble(logList[i].numContactSwitch);
-        //        average += turn;
-        //    }
-        //    average /= logList.Count;
-        //    return average;
-        //}
+        public static double AverageContactSwitchTime(List<Metadata> logList)
+        {
+            double average = 0;
+            for (int i = 0; i < logList.Count; i++)
+            {
+                double turn = System.Convert.ToDouble(logList[i].timesSwapped);
+                average += turn;
+            }
+            average /= logList.Count;
+            return average;
+        }
 
         /// <summary>
         /// function that computes and outputs all results of simulation
@@ -130,6 +130,8 @@ namespace Sim
             averages.Add(startAvg);
             double endAvg = AverageEndTime(logList);
             averages.Add(endAvg);
+            double contactSwitch = AverageContactSwitchTime(logList);
+            averages.Add(contactSwitch);
 
             // write results to results.txt
             //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
