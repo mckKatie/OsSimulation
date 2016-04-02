@@ -8,6 +8,38 @@ using System.IO;
 
 namespace Sim
 {
+
+    class Run
+    {
+        int dataFileID;
+        string type;
+        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0, EndAvg = 0;
+
+        public Run(string algo, int dataFile)
+        {
+            type = algo;
+            dataFileID = dataFile;
+        }
+        public void getAverages(ref DataFile dataInfo)
+        {
+            List<double> avgs = new List<double>();
+
+            avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
+            ResponseAvg = avgs[0];
+            TurnAroundAvg = avgs[1];
+            StartAvg = avgs[2];
+            EndAvg = avgs[3];
+        }
+
+        public void outputInfo(ref DataFile dataInfo)
+        {
+            getAverages(ref dataInfo);
+            Console.WriteLine("For datafile {0} and scheduling algorith {1}...", dataFileID, type);
+            Console.Write("Response Avgerage: \t{0}\nTurnaroundAvg: \t{1}\nStartAvg: \t{2}\nEndAVg: \t{3}\n",
+                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg);
+        }
+    }
+
     class DataFile
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

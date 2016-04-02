@@ -109,7 +109,7 @@ namespace Sim
         /// function that computes and outputs all results of simulation
         /// </summary>
         /// <param name="logInfo"></param>
-        public static void DisplayAverages(Dictionary<int, ProcessControlBLock> logInfo)
+        public static List<double> DisplayAverages(Dictionary<int, ProcessControlBLock> logInfo)
         {
             List<KeyValuePair<int, ProcessControlBLock>> temp = new List<KeyValuePair<int, ProcessControlBLock>>();
             temp.Clear();
@@ -121,19 +121,25 @@ namespace Sim
                 logList.Add(temp[i].Value.log);
             }
 
+            List<double> averages = new List<double>();
             double responseAvg = AverageResponseTime(logList);
+            averages.Add(responseAvg);
             double turnAroundAvg = AverageTurnaroundTime(logList);
+            averages.Add(turnAroundAvg);
             double startAvg = AverageStartTime(logList);
+            averages.Add(startAvg);
             double endAvg = AverageEndTime(logList);
+            averages.Add(endAvg);
 
             // write results to results.txt
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\results.txt"))
-            {
-                outputFile.WriteLine("Averages\n");
-                outputFile.WriteLine("Response Time: {0}, turnaround Time: {1}, Start Time: {2}, end Time: {3}",
-                    responseAvg, turnAroundAvg, startAvg, endAvg);
-            }
+            //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\results.txt"))
+            //{
+            //    outputFile.WriteLine("Averages\n");
+            //    outputFile.WriteLine("Response Time: {0}, turnaround Time: {1}, Start Time: {2}, end Time: {3}",
+            //        responseAvg, turnAroundAvg, startAvg, endAvg);
+            //}
+            return averages;
         }
 
     }
