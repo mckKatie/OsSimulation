@@ -19,10 +19,16 @@ namespace Sim
 
         public SimManager()
         {
+            processes = new Dictionary<int,ProcessControlBLock>();
+            subTimes = new List<Tuple<int,int>>();
+            IOList = new List<Tuple<int,int>>();
+            processors = new List<Processor>();
             for(int i = 0; i < numProcessors; i++)
             {
                 processors.Add(new Processor());
             }
+            // Feel free to add functions here to seed data structures
+
         }
 
         public void RunSimulation()
