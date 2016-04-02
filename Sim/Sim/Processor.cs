@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum Pstate { busy, open, stop, swapping}
+public enum Pstate { busy, open, stop, swapping, interrupted}
 
 
 namespace Sim
@@ -44,6 +44,10 @@ namespace Sim
         public void FreeProcessor()
         {
             state = Pstate.open;
+        }
+        public void InterruptProcess()
+        {
+            state = Pstate.interrupted;
         }
     }
 }

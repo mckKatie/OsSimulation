@@ -37,7 +37,7 @@ namespace Sim
                 return true;
             return false;
         }
-
+        public override void MarkInterrupts() {}
     }
 
     class RR : SimManager
@@ -57,8 +57,8 @@ namespace Sim
             ProcessControlBLock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
-            int allocatedTime = Math.Min(burstTime, quantum);
-            return new Tuple<int, int>(allocatedTime + clock, pid);
+           // int allocatedTime = Math.Min(burstTime, quantum);
+            return new Tuple<int, int>(burstTime + clock, pid);
         }
         override public void ProcessReadyQueue(int PID)
         {
@@ -70,9 +70,8 @@ namespace Sim
                 return true;
             return false;
         }
-        override public void CheckForInterrupts()
+        override public void MarkInterrupts()
         {
-            ProcessReadyQueue(id); // need logic in PCB to adjust bursts vec
 
         }
     }
@@ -107,6 +106,7 @@ namespace Sim
                 return true;
             return false;
         }
+        override public void MarkInterrupts() { }
     }
 
     //class STR : SimManager
