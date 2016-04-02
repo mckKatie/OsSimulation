@@ -13,7 +13,8 @@ namespace Sim
     {
         int dataFileID;
         string type;
-        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0, EndAvg = 0;
+        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
+        double EndAvg = 0, contactSwitch = 0;
 
         public Run(string algo, int dataFile)
         {
@@ -29,14 +30,16 @@ namespace Sim
             TurnAroundAvg = avgs[1];
             StartAvg = avgs[2];
             EndAvg = avgs[3];
+            contactSwitch = avgs[4];
         }
 
         public void outputInfo(ref DataFile dataInfo)
         {
             getAverages(ref dataInfo);
             Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
-            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n\n",
-                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg);
+            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n" + 
+                "Average Contact Switches: \t{4}\n\n",
+                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
         }
     }
 
