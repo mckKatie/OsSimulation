@@ -115,7 +115,7 @@ namespace Sim
                 outputFile.WriteLine("For runs with balanced cpu and io bursts");
                 outputFile.WriteLine("For {0} on {1} processor(s):\n", Convert.ToString(endInfo.strat), endInfo.numProcessors);
                 outputFile.Write("\t Quantum(s): ");
-                foreach (int i in quantums)
+                foreach (int i in endInfo.quantums)
                 {
                     outputFile.Write(i + " ");
                 }
