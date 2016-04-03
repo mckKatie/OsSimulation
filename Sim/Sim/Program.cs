@@ -21,7 +21,7 @@ namespace Sim
                 Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 50);
                 Tuple<int, int> IOBurst = new Tuple<int, int>(10, 50);
 
-                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 50, 150);
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 150 ,50, 150);
                 dataInfo.getInfoFromFile(fileIndex);
 
                 string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
@@ -31,6 +31,7 @@ namespace Sim
                     outputFile.WriteLine("\nThese are the results from Datafile number {0}", fileIndex);
                 }
 
+                #region deploy algorithms
                 /////////// FCFS
                 RunFCFS(ref dataInfo, filePath, 1);
                 //////////// FCFS 2 processors
@@ -87,6 +88,7 @@ namespace Sim
                 RunMLFB(ref dataInfo, filePath, 4, qTimes);
                 RunMLFB(ref dataInfo, filePath, 4, qTimes2);
                 RunMLFB(ref dataInfo, filePath, 4, qTimes3);
+                #endregion
 
                 fileIndex--;
             }

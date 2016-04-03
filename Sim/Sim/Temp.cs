@@ -88,6 +88,18 @@ namespace Sim
             return average;
         }
 
+        public static double AverageWaitTime(List<Metadata> logList)
+        {
+            double average = 0;
+            for (int i = 0; i < logList.Count; i++)
+            {
+                double turn = System.Convert.ToDouble(logList[i].wait);
+                average += turn;
+            }
+            average /= logList.Count;
+            return average;
+        }
+
         /// <summary>
         /// 
         /// </summary>
