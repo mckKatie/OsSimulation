@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum Strategy { FCFS, RR, SPN, STR, HRRN, MLFB }
+public enum Strategy { FCFS, RR, SPN, STR, HRRN, MLFB1, MLFB2, MLFB3 }
 
 namespace Sim
 {
@@ -264,8 +264,8 @@ namespace Sim
         List<Queue<int>> queueList;
         List<int> processorQuantumEnd;
 
-        public MLFB(string filePath, int numProcessors, List<int> quantum)
-            : base(filePath, numProcessors, Strategy.MLFB, quantum)
+        public MLFB(string filePath, int numProcessors, List<int> quantum, Strategy selected)
+            : base(filePath, numProcessors, selected, quantum)
         {
 
             queueList = new List<Queue<int>>();
