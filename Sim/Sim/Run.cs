@@ -17,10 +17,11 @@ namespace Sim
 
         string dataFile;
         double responseAvg = 0, turnAroundAvg = 0, startAvg = 0;
-        double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0;
+        double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;;
 
-        public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors)
+        public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors, int _endTime)
         {
+            endTime = _endTime;
             strat = _strat;
             dataFile = _dataFile;
             numProcessors = _numProcessors;
