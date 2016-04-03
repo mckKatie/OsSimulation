@@ -38,56 +38,59 @@ namespace Sim
                 RunFCFS(ref dataInfo, filePath, 2, empty);
                 //////////// FCFS 4 processors
                 RunFCFS(ref dataInfo, filePath, 4, empty);
+
                 List<int> rr1 = new List<int>(){ 5 };
+                List<int> rr2 = new List<int>() { 20 };
+                List<int> rr3 = new List<int>() { 40 };
                 /////////// RR w/ differing quantums (1 processor)
                 RunRR(ref dataInfo, filePath, 1, rr1);
-                //RunRR(ref dataInfo, filePath, 1, 20);
-                //RunRR(ref dataInfo, filePath, 1, 40);
+                RunRR(ref dataInfo, filePath, 1, rr2);
+                RunRR(ref dataInfo, filePath, 1, rr3);
                 /////////////// RR w/ differing quantums (2 processor)
                 RunRR(ref dataInfo, filePath, 2, rr1);
-                //RunRR(ref dataInfo, filePath, 2, 20);
-                //RunRR(ref dataInfo, filePath, 2, 40);
+                RunRR(ref dataInfo, filePath, 2, rr2);
+                RunRR(ref dataInfo, filePath, 2, rr3);
                 /////////////// RR w/ differing quantums (4 processor)
                 RunRR(ref dataInfo, filePath, 4, rr1);
-                //RunRR(ref dataInfo, filePath, 4, 20);
-                //RunRR(ref dataInfo, filePath, 4, 40);
+                RunRR(ref dataInfo, filePath, 4, rr2);
+                RunRR(ref dataInfo, filePath, 4, rr3);
 
                 ///////////// SPN 
                 RunSPN(ref dataInfo, filePath, 1, empty);
                 ///////////// SPN 2 processors
-                //RunSPN(ref dataInfo, filePath, 2);
+                RunSPN(ref dataInfo, filePath, 2, empty);
                 ///////////// SPN 4 processors
-                //RunSPN(ref dataInfo, filePath, 4);
+                RunSPN(ref dataInfo, filePath, 4, empty);
 
                 ///////////// STR 
                 RunSTR(ref dataInfo, filePath, 1, empty);
                 ///////////// STR 2 processors
-                //RunSTR(ref dataInfo, filePath, 2);
+                RunSTR(ref dataInfo, filePath, 2, empty);
                 ///////////// STR 4 processors
-                //RunSTR(ref dataInfo, filePath, 4);
+                RunSTR(ref dataInfo, filePath, 4, empty);
 
                 ///////////// HRRN
                 //RunHRRN(ref dataInfo, filePath, 1, empty);
                 ///////////// HRRN 2 processors
-                //RunHRRN(ref dataInfo, filePath, 2);
+                RunHRRN(ref dataInfo, filePath, 2, empty);
                 ///////////// HRRN 4 processors
-                //RunHRRN(ref dataInfo, filePath, 4);
+                RunHRRN(ref dataInfo, filePath, 4, empty);
 
                 List<int> qTimes = new List<int>() { 5, 10, 50 };
-                //List<int> qTimes2 = new List<int>() { 10, 40, 80 };
-                //List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
+                List<int> qTimes2 = new List<int>() { 10, 40, 80 };
+                List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
                 ///////////// MLFB
                 RunMLFB(ref dataInfo, filePath, 1, qTimes);
-                //RunMLFB(ref dataInfo, filePath, 1, qTimes2);
-                //RunMLFB(ref dataInfo, filePath, 1, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 1, qTimes2);
+                RunMLFB(ref dataInfo, filePath, 1, qTimes3);
                 ///////////// MLFB 2 processors
-                //RunMLFB(ref dataInfo, filePath, 2, qTimes);
-                //RunMLFB(ref dataInfo, filePath, 2, qTimes2);
-                //RunMLFB(ref dataInfo, filePath, 2, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes2);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes3);
                 ///////////// MLFB 4 processors
-                //RunMLFB(ref dataInfo, filePath, 4, qTimes);
-                //RunMLFB(ref dataInfo, filePath, 4, qTimes2);
-                //RunMLFB(ref dataInfo, filePath, 4, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes2);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes3);
                 #endregion
 
                 fileIndex--;
