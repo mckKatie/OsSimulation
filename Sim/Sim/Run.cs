@@ -45,35 +45,20 @@ namespace Sim
 
         public void outputInfo()
         {
-            
-
             //write results to results.txt
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+            //string mydocpath = @"\results.txt";
 
-            if (File.Exists(mydocpath))
+            using (StreamWriter outputFile = File.AppendText(mydocpath))
             {
-                using (StreamWriter outputFile = File.CreateText(mydocpath))
-                {
-                    outputFile.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFile, strat.ToString());
-                    outputFile.Write(String.Format("Response Avgerage: \t{0:0.00}\nTurnaround Average: \t{1:0.00}\nStart Average: \t{2:0.00}\nEnding Time Average: \t{3:0.00}\n" +
-                        "Average Contact Switches: \t{4:0.00}\n" + "Average CPU Allocations Per Process: \t{5:0.00}\n\n",
-                        responseAvg, turnAroundAvg, startAvg, endAvg, contactSwitches, burstsPerProcess));
-                    outputFile.Close();
-                }
+                outputFile.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFile, strat.ToString());
+                outputFile.Write(String.Format("Response Avgerage: \t\t\t{0:0.00}\nTurnaround Average: \t\t{1:0.00}\nStart Average: \t\t\t\t{2:0.00}\nEnding Time Average: \t\t{3:0.00}\n" +
+                    "Average Contact Switches: \t{4:0.00}\n" + "Average CPU Allocations Per Process: \t{5:0.00}\n\n",
+                    responseAvg, turnAroundAvg, startAvg, endAvg, contactSwitches, burstsPerProcess));
+                outputFile.Close();
             }
-            else
-            {
-                using (StreamWriter outputFile = File.AppendText(mydocpath))
-                {
-                    outputFile.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFile, strat.ToString());
-                    outputFile.Write(String.Format("Response Avgerage: \t{0:0.00}\nTurnaround Average: \t{1:0.00}\nStart Average: \t{2:0.00}\nEnding Time Average: \t{3:0.00}\n" +
-                        "Average Contact Switches: \t{4:0.00}\n" + "Average CPU Allocations Per Process: \t{5:0.00}\n\n",
-                        responseAvg, turnAroundAvg, startAvg, endAvg, contactSwitches, burstsPerProcess));
-                    outputFile.Close();
-                }
-            }
-            
-            Console.WriteLine("check your documents file for results.txt");
+
+           // Console.WriteLine("check your documents file for results.txt");
         }
     }
 }
