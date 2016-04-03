@@ -37,7 +37,7 @@ namespace Sim
                 return true;
             return false;
         }
-        public override void MarkInterrupts(int currentTime) {}
+        public override void MarkInterrupts(int currentTime) { }
     }
 
     public class RR : SimManager
@@ -50,7 +50,7 @@ namespace Sim
             quantum = _quantum;
             readyQueue = new Queue<int>();
             processorQuantumEnd = new List<int>();
-            for(int i = 0; i < processors.Count; i++ )
+            for (int i = 0; i < processors.Count; i++)
             {
                 processorQuantumEnd.Add(0);
             }
@@ -78,9 +78,9 @@ namespace Sim
         override public void MarkInterrupts(int currentTime)
         {
             int numWaiting = readyQueue.Count;
-            for(int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < processors.Count; i++)
             {
-                if(processorQuantumEnd[i] == currentTime && processors[i].isBusy() && numWaiting > 0)
+                if (processorQuantumEnd[i] == currentTime && processors[i].isBusy() && numWaiting > 0)
                 {
                     processors[i].InterruptProcess();
                     numWaiting--;
@@ -102,7 +102,7 @@ namespace Sim
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
-            return new Tuple<int,int>(processData.Item1 + clock, processData.Item2);
+            return new Tuple<int, int>(processData.Item1 + clock, processData.Item2);
         }
 
         override public void ProcessReadyQueue(int PID)
@@ -159,7 +159,7 @@ namespace Sim
                     completionTimes.Add(p.getCompletionTime());
                 }
             }
-            for(int i = 0; i < processors.Count && readyList.Count > i; i++)
+            for (int i = 0; i < processors.Count && readyList.Count > i; i++)
             {
                 completionTimes.Add(readyList[i].Item1 + currentTime);
             }
@@ -178,70 +178,28 @@ namespace Sim
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public class MLFB : SimManager
     {
         Queue<int> readyQueue1;
         Queue<int> readyQueue2;
         Queue<int> readyQueue3;
+        List<int> processorQuantumEnd;
+        int quantum1;
+        int quantum2;
 
-        public MLFB(int numProcessors)
-            : base(numProcessors, Strategy.MLFB)
+        public MLFB(int numProcessors, int _quantum1, int _quantum2)
+            : base(numProcessors, Strategy.RR)
         {
+            quantum1 = _quantum1;
+            quantum2 = _quantum2;
             readyQueue1 = new Queue<int>();
             readyQueue2 = new Queue<int>();
             readyQueue3 = new Queue<int>();
+            processorQuantumEnd = new List<int>();
+            for (int i = 0; i < processors.Count; i++)
+            {
+                processorQuantumEnd.Add(0);
+            }
         }
         override public Tuple<int, int> ProcesOpenProcessor(int id)
         {
