@@ -97,6 +97,8 @@ namespace Sim
             ReducedAnalysis endAnalysis = new ReducedAnalysis();
             endAnalysis.ComputeReducedAverages(runs);
             endAnalysis.completeAnalysis();
+            DataFile stuff = new DataFile();
+            stuff.outputInfoToFile(endAnalysis);
 
         }
 
