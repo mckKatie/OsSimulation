@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum Strategy { FCFS, RR, SPN, STR, HRRN }
+public enum Strategy { FCFS, RR, SPN, STR, HRRN, MLFB }
 
 namespace Sim
 {
@@ -259,4 +259,60 @@ namespace Sim
         public override void AddAdditionalMetadata(Run run) { }
        
     }
+    public class MLFB : SimManager
+    {
+        List<Queue<int>> queueList;
+        List<int> quantum;
+        List<int> processorQuantumEnd;
+
+        public MLFB(string filePath, int numProcessors, List<int> _quantums) : base(filePath, numProcessors, Strategy.MLFB)
+        {
+            quantum = _quantums;
+            for (int i = 0; i < quantum.Count + 1; i++ )
+                queueList.Add(new Queue<int>);
+            processorQuantumEnd = new List<int>();
+            for (int i = 0; i < processors.Count; i++)
+            {
+                processorQuantumEnd.Add(0);
+            }
+        }
+        override public Tuple<int, int> ProcessOpenProcessor(int id) //processor id
+        {
+            int pid = readyQueue.First();
+            readyQueue.Dequeue();
+            ProcessControlBlock temp = getProcessByID(pid);
+            temp.ProcessorInitiate(clock);
+            int burstTime = temp.getNextBurst();
+            processorQuantumEnd[id] = (quantum + clock);
+            return new Tuple<int, int>(burstTime + clock, pid);
+        }
+        override public void ProcessReadyQueue(int PID)
+        {
+            readyQueue.Enqueue(PID);
+        }
+        public override void UpdateReadyQueue() { }
+        override public bool ReadyQueueEmpty()
+        {
+            if (readyQueue.Count == 0)
+                return true;
+            return false;
+        }
+        override public void MarkInterrupts()
+        {
+            int numWaiting = readyQueue.Count;
+            for (int i = 0; i < processors.Count; i++)
+            {
+                if (processorQuantumEnd[i] == clock && processors[i].isBusy() && numWaiting > 0)
+                {
+                    processors[i].InterruptProcess();
+                    numWaiting--;
+                }
+            }
+        }
+        override public void AddAdditionalMetadata(Run run)
+        {
+            run.setQuantum(quantum);
+        }
+    }
+
 }
