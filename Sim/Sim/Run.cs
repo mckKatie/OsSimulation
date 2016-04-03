@@ -21,6 +21,7 @@ namespace Sim
         double throughput = 0, waitAvg = 0;
         public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors, int _endTime)
         {
+            quantums = new List<int>();
             endTime = _endTime;
             strat = _strat;
             dataFile = _dataFile;

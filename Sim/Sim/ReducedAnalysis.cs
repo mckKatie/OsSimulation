@@ -10,20 +10,20 @@ namespace Sim
     {
         public struct StrategyInfo
         {
-            Strategy strat;
-            int numProcessors;
-            List<int> quantums;
-            double turnaroundTime;
-            double waitTime;
-            double simulationTime;
-            double throughput;
-            double responseTime;
-            int numRuns;
+            public Strategy strat;
+            public int numProcessors;
+            public List<int> quantums;
+            public double turnaroundTime;
+            public double waitTime;
+            public double simulationTime;
+            public double throughput;
+            public double responseTime;
+            public int numRuns;
             public StrategyInfo(Strategy _strat, int _numProc, List<int> _q)
             {
+                quantums = _q;
                 strat = _strat;
                 numProcessors = _numProc;
-                quantums = _q;
                 turnaroundTime = 0;
                 waitTime = 0;
                 simulationTime = 0;
