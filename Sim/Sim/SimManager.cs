@@ -95,7 +95,7 @@ namespace Sim
 
         private Run ComposeResults()   //use this function to make run instance
         {
-            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count);
+            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count, clock);
             AddAdditionalMetadata(temp);
             ResetPCBs();
             return temp;
