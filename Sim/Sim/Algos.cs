@@ -91,7 +91,7 @@ namespace Sim
     public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        SPN(int numProcessors)
+        public SPN(int numProcessors)
             : base(numProcessors)
         {
             readyList = new List<Tuple<int, int>>();
@@ -125,7 +125,7 @@ namespace Sim
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
 
-        STR(int numProcessors) : base(numProcessors)
+        public STR(int numProcessors) : base(numProcessors)
         {
             readyList = new List<Tuple<int, int>>();
         }

@@ -20,12 +20,36 @@ namespace Sim
                 dataInfo.getInfoFromFile();
 
                 /////////// FCFS
-                RunFCFS(ref dataInfo, dataFiles, 1);
-                dataInfo.getInfoFromFile();
+                //RunFCFS(ref dataInfo, dataFiles, 1);
+                //dataInfo.getInfoFromFile();
+
+                //////////// FCFS multiprocessor
+                //RunFCFS(ref dataInfo, dataFiles, 4);
+                //dataInfo.getInfoFromFile();
 
                 /////////// RR
-                RunRR(ref dataInfo, dataFiles, 1);
-                dataInfo.getInfoFromFile();
+                //RunRR(ref dataInfo, dataFiles, 1);
+                //dataInfo.getInfoFromFile();
+
+                /////////// RR multiprocessor
+                //RunRR(ref dataInfo, dataFiles, 4);
+                //dataInfo.getInfoFromFile();
+
+                /////////// SPN 
+                //RunSPN(ref dataInfo, dataFiles, 1);
+                //dataInfo.getInfoFromFile();
+
+                /////////// SPN multiprocessor
+                //RunSPN(ref dataInfo, dataFiles, 4);
+                //dataInfo.getInfoFromFile();
+
+                /////////// STR 
+                RunSTR(ref dataInfo, dataFiles, 1);
+                //dataInfo.getInfoFromFile();
+
+                /////////// STR multiprocessor
+                //RunSTR(ref dataInfo, dataFiles, 4);
+                //dataInfo.getInfoFromFile();
 
                 dataFiles--;
             }
@@ -48,9 +72,31 @@ namespace Sim
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             algo2.RunSimulation();
 
-            Run newRun2 = new Run("RR", dataFiles);
-            newRun2.outputInfo(ref dataInfo);
-            runs.Add(newRun2);
+            Run newRun = new Run("RR", dataFiles);
+            newRun.outputInfo(ref dataInfo);
+            runs.Add(newRun);
+        }
+
+        static public void RunSPN(ref DataFile dataInfo, int dataFiles, int processors)
+        {
+            SPN algo = new SPN(processors);
+            algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            algo.RunSimulation();
+
+            Run newRun = new Run("SPN", dataFiles);
+            newRun.outputInfo(ref dataInfo);
+            runs.Add(newRun);
+        }
+
+        static public void RunSTR(ref DataFile dataInfo, int dataFiles, int processors)
+        {
+            STR algo = new STR(processors);
+            algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            algo.RunSimulation();
+
+            Run newRun = new Run("STR", dataFiles);
+            newRun.outputInfo(ref dataInfo);
+            runs.Add(newRun);
         }
 
     }
