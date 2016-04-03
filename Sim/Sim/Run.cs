@@ -17,7 +17,7 @@ namespace Sim
 
         string dataFile;
         double responseAvg = 0, turnAroundAvg = 0, startAvg = 0;
-        double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;;
+        double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;
 
         public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors, int _endTime)
         {
