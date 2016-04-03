@@ -80,17 +80,17 @@ namespace Sim
                 List<int> qTimes2 = new List<int>() { 10, 40, 80 };
                 List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
                 ///////////// MLFB
-                RunMLFB(ref dataInfo, filePath, 1, qTimes);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 1, qTimes, Strategy.MLFB1);
+                RunMLFB(ref dataInfo, filePath, 1, qTimes2, Strategy.MLFB2);
+                RunMLFB(ref dataInfo, filePath, 1, qTimes3, Strategy.MLFB3);
                 ///////////// MLFB 2 processors
-                RunMLFB(ref dataInfo, filePath, 2, qTimes);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes,  Strategy.MLFB1);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes2, Strategy.MLFB2);
+                RunMLFB(ref dataInfo, filePath, 2, qTimes3, Strategy.MLFB3);
                 ///////////// MLFB 4 processors
-                RunMLFB(ref dataInfo, filePath, 4, qTimes);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes3);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes,  Strategy.MLFB1);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes2, Strategy.MLFB2);
+                RunMLFB(ref dataInfo, filePath, 4, qTimes3, Strategy.MLFB3);
                 #endregion
 
                 fileIndex--;
@@ -147,10 +147,10 @@ namespace Sim
             //newRun.outputInfo();
             runs.Add(newRun);
         }
-        static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
+        static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantum, Strategy selectedStrat)
         {
 
-            MLFB algo = new MLFB(filePath, processors, quantum);
+            MLFB algo = new MLFB(filePath, processors, quantum, selectedStrat);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             //newRun.outputInfo();
