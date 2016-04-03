@@ -178,5 +178,13 @@ namespace Sim
         }
     }
 
+    public class MLFB : SimManager
+    {
+        Queue<int> readyQueue1;
+        Queue<int> readyQueue2;
+        Queue<int> readyQueue3;
+
+        override public Tuple<int, int> ProcesOpenProcessor(int id)
+    }
 
 }
