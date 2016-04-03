@@ -20,7 +20,7 @@ namespace Sim
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
-            ProcessControlBLock temp = getProcessByID(pid);
+            ProcessControlBlock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
             return new Tuple<int, int>(burstTime + clock, pid);
@@ -40,7 +40,7 @@ namespace Sim
         public override void MarkInterrupts(int currentTime) {}
     }
 
-    class RR : SimManager
+    public class RR : SimManager
     {
         Queue<int> readyQueue;
         List<int> processorQuantumEnd;
@@ -60,7 +60,7 @@ namespace Sim
         {
             int pid = readyQueue.First();
             readyQueue.Dequeue();
-            ProcessControlBLock temp = getProcessByID(pid);
+            ProcessControlBlock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
             processorQuantumEnd[id].Equals(quantum + clock);
@@ -88,10 +88,10 @@ namespace Sim
         }
     }
 
-    class SPN : SimManager
+    public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        SPN(int numProcessors)
+        public SPN(int numProcessors)
             : base(numProcessors)
         {
             readyList = new List<Tuple<int, int>>();
@@ -100,14 +100,14 @@ namespace Sim
         {
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
-            ProcessControlBLock temp = getProcessByID(processData.Item2);
+            ProcessControlBlock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
             return processData;
         }
 
         override public void ProcessReadyQueue(int PID)
         {
-            ProcessControlBLock temp = getProcessByID(PID);
+            ProcessControlBlock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
             readyList.Add(new Tuple<int, int>(burstTime, PID));
             readyList.Sort();
@@ -125,7 +125,7 @@ namespace Sim
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
 
-        STR(int numProcessors) : base(numProcessors)
+        public STR(int numProcessors) : base(numProcessors)
         {
             readyList = new List<Tuple<int, int>>();
         }
@@ -133,13 +133,13 @@ namespace Sim
         {
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
-            ProcessControlBLock temp = getProcessByID(processData.Item2);
+            ProcessControlBlock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
             return processData;
         }
         override public void ProcessReadyQueue(int PID)
         {
-            ProcessControlBLock temp = getProcessByID(PID);
+            ProcessControlBlock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
             readyList.Add(new Tuple<int, int>(burstTime, PID));
             readyList.Sort();
@@ -155,7 +155,7 @@ namespace Sim
             List<int> completionTimes = new List<int>();
             foreach (Processor p in processors)
             {
-                if (p.getState() == Pstate.busy)
+                if (p.isBusy())
                 {
                     completionTimes.Add(p.getCompletionTime());
                 }
@@ -168,7 +168,7 @@ namespace Sim
             int interruptMarker = completionTimes[processors.Count - 1];
             foreach (Processor p in processors)
             {
-                if (p.getCompletionTime() > interruptMarker)
+                if (p.getCompletionTime() > interruptMarker && p.isBusy())
                 {
                     p.InterruptProcess();
                 }
@@ -176,4 +176,6 @@ namespace Sim
 
         }
     }
+
+
 }

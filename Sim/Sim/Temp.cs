@@ -109,9 +109,9 @@ namespace Sim
         /// function that computes and outputs all results of simulation
         /// </summary>
         /// <param name="logInfo"></param>
-        public static List<double> DisplayAverages(Dictionary<int, ProcessControlBLock> logInfo)
+        public static List<double> DisplayAverages(Dictionary<int, ProcessControlBlock> logInfo)
         {
-            List<KeyValuePair<int, ProcessControlBLock>> temp = new List<KeyValuePair<int, ProcessControlBLock>>();
+            List<KeyValuePair<int, ProcessControlBlock>> temp = new List<KeyValuePair<int, ProcessControlBlock>>();
             temp.Clear();
             temp = logInfo.ToList();
 
