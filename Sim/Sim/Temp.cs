@@ -158,7 +158,8 @@ namespace Sim
             averages.Add(contactSwitch);
             double burstCountPerProcess = AverageCPUAllocationsPerProcess(logList);
             averages.Add(burstCountPerProcess);
-
+            double waitAvg = AverageWaitTime(logList);
+            averages.Add(waitAvg);
             // write results to results.txt
             //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             //using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\results.txt"))
