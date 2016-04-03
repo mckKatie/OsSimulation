@@ -46,8 +46,8 @@ namespace Sim
         public void outputInfo()
         {
             //write results to results.txt
-            //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
-            string mydocpath = @"\results.txt";
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+            //string mydocpath = @"\results.txt";
 
             using (StreamWriter outputFile = File.AppendText(mydocpath))
             {
