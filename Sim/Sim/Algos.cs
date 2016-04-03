@@ -92,8 +92,7 @@ namespace Sim
     public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        public SPN(int numProcessors)
-            : base(numProcessors, Strategy.SPN)
+        public SPN(int numProcessors) : base(numProcessors, Strategy.SPN)
         {
             readyList = new List<Tuple<int, int>>();
         }
@@ -103,7 +102,7 @@ namespace Sim
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
-            return processData;
+            return new Tuple<int,int>(processData.Item1 + clock, processData.Item2);
         }
 
         override public void ProcessReadyQueue(int PID)

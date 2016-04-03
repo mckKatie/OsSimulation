@@ -28,7 +28,7 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
-                RunRR(ref dataInfo, dataFiles, 1, 2);
+                //RunRR(ref dataInfo, dataFiles, 1, 2);
               
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();

@@ -68,18 +68,18 @@ namespace Sim
             using (StreamWriter data = new StreamWriter(mydocpath + @"\results.txt"))
             {
                 Random inputs = new Random();
-                int processes = inputs.Next(1, 150);
+                int processes = inputs.Next(1, 50);
                 for (int i = 0; i < processes; i++)
                 {
                     // PID is i, 10 random bursts
                     // random number for arrival time
                     data.Write(i + " ");
-                    int time = inputs.Next(1, 50);
+                    int time = inputs.Next(1, 100);
                     data.Write(time + " "); // arrival time
-                    int bursts = inputs.Next(1, 30);
+                    int bursts = inputs.Next(1, 20);
                     for (int j = 0; j < bursts; j++)
                     {
-                        time = inputs.Next(1, 200);
+                        time = inputs.Next(1, 30);
                         data.Write(time + " ");
                     }
                     data.Write("\n");
