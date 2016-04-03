@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum Pstate { busy, open, stop, swapping, interrupted}
-
+enum Pstate { busy, open, stop, swapping, interrupted}
+//might be able to replace all instances of stop with swapping
 
 namespace Sim
 {
@@ -22,7 +22,36 @@ namespace Sim
         }
         public int getPID(){ return PID; }
         public int getProcID() { return processorID; }
-        public Pstate getState(){ return state;}
+        public bool isSwapping()
+        {
+            if (state == Pstate.swapping)
+                return true;
+            return false;
+        }
+        public bool isBusy()
+        {
+            if (state == Pstate.busy)
+                return true;
+            return false;
+        }
+        public bool isOpen()
+        {
+            if (state == Pstate.open)
+                return true;
+            return false;
+        }
+        public bool isStopped()
+        {
+            if (state == Pstate.stop)
+                return true;
+            return false;
+        }
+        public bool isInterrupted()
+        {
+            if (state == Pstate.interrupted)
+                return true;
+            return false;
+        }
         public int getCompletionTime() { return burstCompletionTime; }
         public bool BurstCompleteCheck(int currentTime)
         {

@@ -7,30 +7,52 @@ using System.Threading.Tasks;
 
 
 
-public enum state {running, finished, io, ready}
+enum state {running, finished, io, ready}
 
 namespace Sim
 {
-    public class ProcessControlBLock
+    public class ProcessControlBlock
     {
         int PID;
         state currentState;
-        public List<int> bursts;
+        List<int> bursts;
         
         public Metadata log;
-        public ProcessControlBLock(int submitTime, int _PID, List<int> _bursts)
-
+        public ProcessControlBlock(int submitTime, int _PID, List<int> _bursts)
         {
             PID = _PID;
             currentState = state.ready;
             bursts = _bursts;   //this is referentially assigned
             log = new Metadata(submitTime);
         }
-        public state getState() { return currentState; }
+        public bool isRunning()
+        {
+            if (currentState == state.running)
+                return true;
+            return false;
+        }
+        public bool isFinished()
+        {
+            if (currentState == state.finished)
+                return true;
+            return false;
+        }
+        public bool isIO()
+        {
+            if (currentState == state.io)
+                return true;
+            return false;
+        }
+        public bool isReady()
+        {
+            if (currentState == state.ready)
+                return true;
+            return false;
+        }
         public int getNextBurst() { return bursts[0]; }
         public void ProcessorInitiate(int currentTime)
         {
-            log.UpdateLog(currentState, currentTime);
+            log.UpdateLog(this, currentTime);
             if (log.getResponse() == -1)
             {
                 log.setResponse(currentTime);
@@ -40,7 +62,7 @@ namespace Sim
 
         public void CPUFinish(int currentTime)
         {
-            log.UpdateLog(currentState, currentTime);
+            log.UpdateLog(this, currentTime);
             bursts.RemoveAt(0);
             if(bursts.Count == 0)
             {
@@ -53,7 +75,7 @@ namespace Sim
 
         public void CPUInterrupt(int currentTime)
         {
-            int workDone = log.UpdateLog(currentState, currentTime);
+            int workDone = log.UpdateLog(this, currentTime);
             bursts[0] -= workDone;
             currentState = state.ready;
             log.timesSwapped++;
@@ -61,7 +83,7 @@ namespace Sim
 
         public void IOFinish(int currentTime)
         {
-            log.UpdateLog(currentState, currentTime);
+            log.UpdateLog(this, currentTime);
             bursts.RemoveAt(0);
             if(bursts.Count == 0)
             {
@@ -76,6 +98,8 @@ namespace Sim
         {
             log.setCompleted(currentTime);
         }
+
+
     }
 }
 

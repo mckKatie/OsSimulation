@@ -44,7 +44,7 @@
     <Compile Include="Algos.cs" />
     <Compile Include="DataFile.cs" />
     <Compile Include="Metadata.cs" />
-    <Compile Include="ProcessControlBLock.cs" />
+    <Compile Include="ProcessControlBlock.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
