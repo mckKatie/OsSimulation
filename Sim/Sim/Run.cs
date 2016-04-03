@@ -18,7 +18,7 @@ namespace Sim
         string dataFile;
         double responseAvg = 0, turnAroundAvg = 0, startAvg = 0;
         double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;
-
+        double throughput = 0, waitAvg;
         public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors, int _endTime)
         {
             endTime = _endTime;
@@ -34,6 +34,16 @@ namespace Sim
         public void setQuantums(List<int> q)
         {
             quantums = q;
+        }
+        public double getTurnaround() { return turnAroundAvg; }
+        public double getWait() { return waitAvg; }
+        public double getResponse() { return responseAvg; }
+        public double getThroughput() { return throughputAvg; }
+        public double getSimulation() { return endTime; }
+
+        public Tuple<Strategy, int, List<int>> getKey()
+        {
+            return new Tuple<Strategy, int, List<int>>(strat, numProcessors, quantums);
         }
         public void computeAverages(Dictionary<int, ProcessControlBlock> procs)
         {
