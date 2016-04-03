@@ -220,7 +220,7 @@ namespace Sim
             public int getBurstTime(){return burstTime;}
             public double getValue() { return value; }
         }
-        List<ReadyQueueEntry> readyList; //ratio, readyListArrivalTime, pid
+        List<ReadyQueueEntry> readyList;
         public HRRN(string filePath, int numProcessors): base(filePath, numProcessors, Strategy.HRRN)
         {
             readyList = new List<ReadyQueueEntry>();

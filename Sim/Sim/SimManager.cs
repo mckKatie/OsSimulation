@@ -69,7 +69,7 @@ namespace Sim
                 //submit new processes
                 CheckForProcesses(subTimes);
                 //assign to free processors
-                UpdateReadyQueue();
+                UpdateReadyQueue();// calls strategy specific sort function if required
                 AssignFreeProcessors();
                 if(subTimes.Count != 0)
                 {

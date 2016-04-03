@@ -20,7 +20,7 @@ namespace Sim
                 dataInfo.getInfoFromFile(fileIndex);
 
                 /////////// FCFS
-                RunFCFS(ref dataInfo, filePath, 1);
+                //RunFCFS(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 //////////// FCFS multiprocessor
@@ -28,7 +28,7 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
-                RunRR(ref dataInfo, filePath, 1, 10);
+                //RunRR(ref dataInfo, filePath, 1, 10);
               
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
@@ -38,7 +38,7 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// SPN 
-                RunSPN(ref dataInfo, filePath, 1);
+                //RunSPN(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 /////////// SPN multiprocessor
@@ -46,13 +46,15 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// STR 
-                RunSTR(ref dataInfo, filePath, 1);
+                //RunSTR(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 /////////// STR multiprocessor
                 //RunSTR(ref dataInfo, dataFiles, 4);
                 //dataInfo.getInfoFromFile();
 
+                /////////// HRRN
+                RunHRRN(ref dataInfo, filePath, 1);
                 fileIndex--;
             }
         }
@@ -92,6 +94,13 @@ namespace Sim
             newRun.outputInfo();
             runs.Add(newRun);
         }
-
+        static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
+        {
+            HRRN algo = new HRRN(filePath, processors);
+            algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
+            runs.Add(newRun);
+        }
     }
 }
