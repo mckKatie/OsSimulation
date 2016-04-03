@@ -11,16 +11,12 @@ namespace Sim
             public int submitted;
             public int completed;
             public int CPUBurstCount;
-
             public int response;
             public int execution;
             public int wait;
             public int io;
-
             public int timesSwapped;
-
             public int burstMarker;
-
             public Metadata(int submitTime)
             {
                 submitted = submitTime;
@@ -29,9 +25,7 @@ namespace Sim
                 io = 0;
                 timesSwapped = 0;
                 CPUBurstCount = 0;
-
                 response = -1;
-
                 burstMarker = submitted;
             }
 
@@ -66,30 +60,11 @@ namespace Sim
                 completed = 0;
             }
 
-            private int getDuration(int currentTime)
-            {
-                return currentTime - burstMarker;
-            }
-
-
-
-            public int getResponse()
-            {
-                return response;
-            }
-            public void setResponse(int currentTime)
-            {
-                response = currentTime - submitted;
-            }
-            public void setCompleted(int currentTime)
-            {
-                completed = currentTime;
-            }
-            public int getCompleted()
-            {
-                return completed;
-            }
-
+            private int getDuration(int currentTime)  { return currentTime - burstMarker;}
+            public int getResponse(){return response; }
+            public void setResponse(int currentTime){response = currentTime - submitted; }
+            public void setCompleted(int currentTime) {completed = currentTime; }
+            public int getCompleted() { return completed; }
 
         }
     
