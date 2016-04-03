@@ -9,10 +9,10 @@ namespace Sim
     public class MultiMap<V>
     {
         // 1
-        Dictionary<Tuple<Strategy, int, List<int>>, List<V>> _dictionary = new Dictionary<Tuple<Strategy, int, List<int>>, List<V>>();
+        Dictionary<Tuple<Strategy, int>, List<V>> _dictionary = new Dictionary<Tuple<Strategy, int>, List<V>>();
 
         // 2
-        public void Add(Tuple<Strategy, int, List<int>> key, V value)
+        public void Add(Tuple<Strategy, int> key, V value)
         {
             List<V> list;
             if (this._dictionary.TryGetValue(key, out list))
@@ -30,7 +30,7 @@ namespace Sim
         }
 
         // 3
-        public IEnumerable<Tuple<Strategy, int, List<int>>> Keys
+        public IEnumerable<Tuple<Strategy, int>> Keys
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Sim
         }
 
         // 4
-        public List<V> this[Tuple<Strategy, int, List<int>> key]
+        public List<V> this[Tuple<Strategy, int> key]
         {
             get
             {

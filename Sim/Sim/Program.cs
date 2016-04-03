@@ -21,73 +21,73 @@ namespace Sim
                 Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 50);
                 Tuple<int, int> IOBurst = new Tuple<int, int>(10, 50);
 
-                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 150 ,50, 150);
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 150, 50, 150);
                 dataInfo.getInfoFromFile(fileIndex);
 
-                string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+                //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
 
-                using (StreamWriter outputFile = File.AppendText(mydocpath))
-                {
-                    outputFile.WriteLine("\nThese are the results from Datafile number {0}", fileIndex);
-                }
-
+                //using (StreamWriter outputFile = File.AppendText(mydocpath))
+                //{
+                //    outputFile.WriteLine("\nThese are the results from Datafile number {0}", fileIndex);
+                //}
+                List<int> empty = new List<int>();
                 #region deploy algorithms
                 /////////// FCFS
-                RunFCFS(ref dataInfo, filePath, 1);
+                RunFCFS(ref dataInfo, filePath, 1, empty);
                 //////////// FCFS 2 processors
-                RunFCFS(ref dataInfo, filePath, 2);
+                RunFCFS(ref dataInfo, filePath, 2, empty);
                 //////////// FCFS 4 processors
-                RunFCFS(ref dataInfo, filePath, 4);
-
+                RunFCFS(ref dataInfo, filePath, 4, empty);
+                List<int> rr1 = new List<int>(){ 5 };
                 /////////// RR w/ differing quantums (1 processor)
-                RunRR(ref dataInfo, filePath, 1, 5);
-                RunRR(ref dataInfo, filePath, 1, 20);
-                RunRR(ref dataInfo, filePath, 1, 40);
-                /////////// RR w/ differing quantums (2 processor)
-                RunRR(ref dataInfo, filePath, 2, 5);
-                RunRR(ref dataInfo, filePath, 2, 20);
-                RunRR(ref dataInfo, filePath, 2, 40);
-                /////////// RR w/ differing quantums (4 processor)
-                RunRR(ref dataInfo, filePath, 4, 5);
-                RunRR(ref dataInfo, filePath, 4, 20);
-                RunRR(ref dataInfo, filePath, 4, 40);
+                RunRR(ref dataInfo, filePath, 1, rr1);
+                //RunRR(ref dataInfo, filePath, 1, 20);
+                //RunRR(ref dataInfo, filePath, 1, 40);
+                /////////////// RR w/ differing quantums (2 processor)
+                RunRR(ref dataInfo, filePath, 2, rr1);
+                //RunRR(ref dataInfo, filePath, 2, 20);
+                //RunRR(ref dataInfo, filePath, 2, 40);
+                /////////////// RR w/ differing quantums (4 processor)
+                RunRR(ref dataInfo, filePath, 4, rr1);
+                //RunRR(ref dataInfo, filePath, 4, 20);
+                //RunRR(ref dataInfo, filePath, 4, 40);
 
-                /////////// SPN 
-                RunSPN(ref dataInfo, filePath, 1);
-                /////////// SPN 2 processors
-                RunSPN(ref dataInfo, filePath, 2);
-                /////////// SPN 4 processors
-                RunSPN(ref dataInfo, filePath, 4);
+                ///////////// SPN 
+                RunSPN(ref dataInfo, filePath, 1, empty);
+                ///////////// SPN 2 processors
+                //RunSPN(ref dataInfo, filePath, 2);
+                ///////////// SPN 4 processors
+                //RunSPN(ref dataInfo, filePath, 4);
 
-                /////////// STR 
-                RunSTR(ref dataInfo, filePath, 1);
-                /////////// STR 2 processors
-                RunSTR(ref dataInfo, filePath, 2);
-                /////////// STR 4 processors
-                RunSTR(ref dataInfo, filePath, 4);
+                ///////////// STR 
+                RunSTR(ref dataInfo, filePath, 1, empty);
+                ///////////// STR 2 processors
+                //RunSTR(ref dataInfo, filePath, 2);
+                ///////////// STR 4 processors
+                //RunSTR(ref dataInfo, filePath, 4);
 
-                /////////// HRRN
-                RunHRRN(ref dataInfo, filePath, 1);
-                /////////// HRRN 2 processors
-                RunHRRN(ref dataInfo, filePath, 2);
-                /////////// HRRN 4 processors
-                RunHRRN(ref dataInfo, filePath, 4);
+                ///////////// HRRN
+                //RunHRRN(ref dataInfo, filePath, 1, empty);
+                ///////////// HRRN 2 processors
+                //RunHRRN(ref dataInfo, filePath, 2);
+                ///////////// HRRN 4 processors
+                //RunHRRN(ref dataInfo, filePath, 4);
 
                 List<int> qTimes = new List<int>() { 5, 10, 50 };
-                List<int> qTimes2 = new List<int>() { 10, 40, 80 };
-                List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
-                /////////// MLFB
+                //List<int> qTimes2 = new List<int>() { 10, 40, 80 };
+                //List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
+                ///////////// MLFB
                 RunMLFB(ref dataInfo, filePath, 1, qTimes);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes3);
-                /////////// MLFB 2 processors
-                RunMLFB(ref dataInfo, filePath, 2, qTimes);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes3);
-                /////////// MLFB 4 processors
-                RunMLFB(ref dataInfo, filePath, 4, qTimes);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes2);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes3);
+                //RunMLFB(ref dataInfo, filePath, 1, qTimes2);
+                //RunMLFB(ref dataInfo, filePath, 1, qTimes3);
+                ///////////// MLFB 2 processors
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes);
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes2);
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes3);
+                ///////////// MLFB 4 processors
+                //RunMLFB(ref dataInfo, filePath, 4, qTimes);
+                //RunMLFB(ref dataInfo, filePath, 4, qTimes2);
+                //RunMLFB(ref dataInfo, filePath, 4, qTimes3);
                 #endregion
 
                 fileIndex--;
@@ -97,20 +97,20 @@ namespace Sim
             ReducedAnalysis endAnalysis = new ReducedAnalysis();
             endAnalysis.ComputeReducedAverages(runs);
             DataFile stuff = new DataFile();
-            stuff.outputInfoToFile(endAnalysis);
+            stuff.outputInfoToFile(endAnalysis.getReducedData());
 
         }
 
-        static public void RunFCFS(ref DataFile dataInfo, string filePath, int processors)
+        static public void RunFCFS(ref DataFile dataInfo, string filePath, int processors,  List<int> quantum)
         {
-            FCFS algo1 = new FCFS(filePath, processors);
+            FCFS algo1 = new FCFS(filePath, processors, quantum);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo1.RunSimulation();
             //newRun.outputInfo();
             runs.Add(newRun);
         }
 
-        static public void RunRR(ref DataFile dataInfo, string filePath, int processors, int quantum)
+        static public void RunRR(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
         {
             RR algo2 = new RR(filePath, processors, quantum);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
@@ -119,35 +119,35 @@ namespace Sim
             runs.Add(newRun);
         }
 
-        static public void RunSPN(ref DataFile dataInfo, string filePath, int processors)
+        static public void RunSPN(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
         {
-            SPN algo = new SPN(filePath, processors);
+            SPN algo = new SPN(filePath, processors, quantum);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             //newRun.outputInfo();
             runs.Add(newRun);
         }
 
-        static public void RunSTR(ref DataFile dataInfo, string filePath, int processors)
+        static public void RunSTR(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
         {
-            STR algo = new STR(filePath, processors);
+            STR algo = new STR(filePath, processors, quantum);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             //newRun.outputInfo();
             runs.Add(newRun);
         }
-        static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
+        static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
         {
-            HRRN algo = new HRRN(filePath, processors);
+            HRRN algo = new HRRN(filePath, processors, quantum);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             //newRun.outputInfo();
             runs.Add(newRun);
         }
-        static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantumTimes)
+        static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
         {
 
-            MLFB algo = new MLFB(filePath, processors, quantumTimes);
+            MLFB algo = new MLFB(filePath, processors, quantum);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             //newRun.outputInfo();
