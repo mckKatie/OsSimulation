@@ -60,12 +60,12 @@ namespace Sim
         /// make the data files for the program. Short sweet, to the point...datafile
         /// the order is PID, arrivalTime, then the bursts
         /// </summary>
-        public void MakeDataFile()
+        public string MakeDataFile(int fileIndex)
         {
 
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            using (StreamWriter data = new StreamWriter(mydocpath + @"\results.txt"))
+            string filePath = mydocpath + @"\input" + fileIndex + ".txt";
+            using (StreamWriter data = new StreamWriter(filePath))
             {
                 Random inputs = new Random();
                 int processes = inputs.Next(1, 50);
@@ -87,6 +87,7 @@ namespace Sim
                 data.Close();
 
             }
+            return filePath;
         }
         /// <summary>
         /// Info is stored in PCB, it's constructor asks for all 
@@ -94,12 +95,12 @@ namespace Sim
         /// with the PID as the key.
         /// Lastly, this function makes the pairs for the ready queue of the submit times and the PID
         /// </summary>
-        public void getInfoFromFile()
+        public void getInfoFromFile(int fileIndex)
         {
             
             importantInfo.Clear();
             submitTimes.Clear();
-            string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
+            string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\input" + fileIndex + ".txt");
             foreach (string line in lines)
             {
                 string[] difValues = line.Split(' ');
