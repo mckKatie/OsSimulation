@@ -31,7 +31,7 @@ namespace Sim
 
         }
 
-        public void getInfo(Dictionary<int, ProcessControlBLock> procs, List<Tuple<int, int>> subs)
+        public void getInfo(Dictionary<int, ProcessControlBLock> procs, List<Tuple<int, int>> subs) // need to hard copy data if running in parallel
         {
             processes = procs;
             subTimes = subs;
