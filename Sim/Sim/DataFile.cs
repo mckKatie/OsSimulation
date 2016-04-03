@@ -9,6 +9,7 @@ using System.IO;
 namespace Sim
 {
 
+<<<<<<< HEAD
     //class Run
     //{
     //    int dataFileID;
@@ -42,6 +43,41 @@ namespace Sim
     //            ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
     //    }
     //}
+=======
+    class Run
+    {
+        int dataFileID;
+        string type;
+        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
+        double EndAvg = 0, contactSwitch = 0;
+
+        public Run(string algo, int dataFile)
+        {
+            type = algo;
+            dataFileID = dataFile;
+        }
+        public void getAverages(ref DataFile dataInfo)
+        {
+            List<double> avgs = new List<double>();
+
+            avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
+            ResponseAvg = avgs[0];
+            TurnAroundAvg = avgs[1];
+            StartAvg = avgs[2];
+            EndAvg = avgs[3];
+            contactSwitch = avgs[4];
+        }
+
+        public void outputInfo(ref DataFile dataInfo)
+        {
+            getAverages(ref dataInfo);
+            Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
+            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t\t{2}\nEnding Time Average: \t{3}\n" + 
+                "Average Contact Switches: \t{4}\n\n",
+                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
+        }
+    }
+>>>>>>> f7041d9915e529d4a358d95efb95a4193664da53
 
     class DataFile
     {
@@ -69,26 +105,26 @@ namespace Sim
             using (StreamWriter data = new StreamWriter(mydocpath + @"\results.txt"))
             {
                 Random inputs = new Random();
-                int processes = inputs.Next(1, 10);
+                int processes = inputs.Next(1, 150);
                 for (int i = 0; i < processes; i++)
                 {
                     // PID is i, 10 random bursts
                     // random number for arrival time
                     data.Write(i + " ");
-                    int time = inputs.Next(1, 10);
+                    int time = inputs.Next(1, 50);
                     data.Write(time + " "); // arrival time
-                    int bursts = inputs.Next(1, 5);
+                    int bursts = inputs.Next(1, 30);
                     for (int j = 0; j < bursts; j++)
                     {
-                        time = inputs.Next(1, 10);
+                        time = inputs.Next(1, 200);
                         data.Write(time + " ");
                     }
                     data.Write("\n");
                 }
+                data.Close();
 
             }
         }
-
         /// <summary>
         /// Info is stored in PCB, it's constructor asks for all 
         /// the info.  Then all the PCB's are stored into a dictionary
@@ -97,7 +133,7 @@ namespace Sim
         /// </summary>
         public void getInfoFromFile()
         {
-            MakeDataFile();
+            
             importantInfo.Clear();
             submitTimes.Clear();
             string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
@@ -125,15 +161,14 @@ namespace Sim
                 importantInfo.Add(PID, newProcess);
                 submitTimes.Add(new Tuple<int,int>(submitted, PID));
 
-                Console.Write("Pid: {0}, submitted: {1}, bursts: ", PID, submitted);
-                foreach (int b in bursts)
-                {
-                    Console.Write(b + " ");
-                }
-                Console.Write("\n");
+                //Console.Write("Pid: {0}, submitted: {1}, bursts: ", PID, submitted);
+                //foreach (int b in bursts)
+                //{
+                //    Console.Write(b + " ");
+                //}
+                //Console.Write("\n");
 
             }
         }
-
     }
 }
