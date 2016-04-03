@@ -33,7 +33,7 @@ namespace Sim
         {
             readyQueue.Enqueue(PID);
         }
-
+        public override void UpdateReadyQueue() { }      
         override public bool ReadyQueueEmpty()
         {
             if (readyQueue.Count == 0)
@@ -73,6 +73,7 @@ namespace Sim
         {
             readyQueue.Enqueue(PID);
         }
+        public override void UpdateReadyQueue(){}
         override public bool ReadyQueueEmpty()
         {
             if (readyQueue.Count == 0)
@@ -118,6 +119,9 @@ namespace Sim
             ProcessControlBlock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
             readyList.Add(new Tuple<int, int>(burstTime, PID));
+        }
+        public override void UpdateReadyQueue()
+        {
             readyList.Sort();
         }
         override public bool ReadyQueueEmpty()
@@ -150,6 +154,9 @@ namespace Sim
             ProcessControlBlock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
             readyList.Add(new Tuple<int, int>(burstTime, PID));
+        }
+        public override void UpdateReadyQueue()
+        {
             readyList.Sort();
         }
         override public bool ReadyQueueEmpty()
@@ -190,18 +197,42 @@ namespace Sim
 
     public class HRRN : SimManager
     {
-        List<Tuple<double, int, int>> readyList; //ratio, pid, readyListArrivalTime
+        struct ReadyQueueEntry
+        {
+            double value;
+            int arrivalTime;
+            int burstTime;
+            int PID;
+
+            public ReadyQueueEntry(int _PID, int _burstTime, int currentTime)
+            {
+                PID = _PID;
+                arrivalTime = currentTime;
+                burstTime = _burstTime;
+                value = 0;
+                ComputeRatio(currentTime);
+            }
+            public void ComputeRatio(int currentTime)
+            {
+                value = ((burstTime + currentTime - arrivalTime) / (double) burstTime);
+            }
+            public int getPID() { return PID; }
+            public int getBurstTime(){return burstTime;}
+            public double getValue() { return value; }
+        }
+        List<ReadyQueueEntry> readyList; //ratio, readyListArrivalTime, pid
         public HRRN(string filePath, int numProcessors): base(filePath, numProcessors, Strategy.HRRN)
         {
-            readyList = new List<Tuple<double, int, int>>();
+            readyList = new List<ReadyQueueEntry>();
         }
+        
         override public Tuple<int, int> ProcessOpenProcessor(int id) // returns <PID, endAllocatedTime> , takes processor id
         {
-            int pid = readyList[0].Item2;
+            int pid = readyList[0].getPID();
+            int burstTime = readyList[0].getBurstTime();
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
-            int burstTime = temp.getNextBurst();
             return new Tuple<int, int>(burstTime + clock, pid);
         }
         override public bool ReadyQueueEmpty()
@@ -210,6 +241,22 @@ namespace Sim
                 return true;
             return false;
         }
-        public override void MarkInterrupts() { }
+        override public void ProcessReadyQueue(int PID)
+        {
+            ProcessControlBlock temp = getProcessByID(PID);
+            int burstTime = temp.getNextBurst();
+            readyList.Add(new ReadyQueueEntry(PID, burstTime, clock));
+        }
+        public override void UpdateReadyQueue()
+        {
+            foreach(ReadyQueueEntry rqe in readyList)
+            {
+                rqe.ComputeRatio(clock);
+            }
+            readyList = readyList.OrderByDescending(v => v.getValue()).ToList();
+        }
+        override public void MarkInterrupts() { }
+        public override void AddAdditionalMetadata(Run run) { }
+       
     }
 }
