@@ -8,7 +8,7 @@ namespace Sim
 {
     public class ReducedAnalysis
     {
-        struct StrategyInfo
+        public struct StrategyInfo
         {
             Strategy strat;
             int numProcessors;
