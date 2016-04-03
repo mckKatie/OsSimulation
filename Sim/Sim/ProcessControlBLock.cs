@@ -75,6 +75,7 @@ namespace Sim
                 log.setResponse(currentTime);
             }
             currentState = state.running;
+            log.CPUBurstCount++;
         }
 
         public void CPUFinish(int currentTime)

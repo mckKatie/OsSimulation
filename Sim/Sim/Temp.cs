@@ -105,6 +105,18 @@ namespace Sim
             return average;
         }
 
+        public static double AverageCPUAllocationsPerProcess(List<Metadata> logList)
+        {
+            double average = 0;
+            for (int i = 0; i < logList.Count; i++)
+            {
+                double count = System.Convert.ToDouble(logList[i].CPUBurstCount);
+                average += count;
+            }
+            average /= logList.Count;
+            return average;
+        }
+
         /// <summary>
         /// function that computes and outputs all results of simulation
         /// </summary>
@@ -132,6 +144,8 @@ namespace Sim
             averages.Add(endAvg);
             double contactSwitch = AverageContactSwitchTime(logList);
             averages.Add(contactSwitch);
+            double burstCountPerProcess = AverageCPUAllocationsPerProcess(logList);
+            averages.Add(burstCountPerProcess);
 
             // write results to results.txt
             //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
