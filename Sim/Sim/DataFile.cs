@@ -8,40 +8,39 @@ using System.IO;
 
 namespace Sim
 {
+    //class Run
+    //{
+    //    int dataFileID;
+    //    string type;
+    //    double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
+    //    double EndAvg = 0, contactSwitch = 0;
 
-    class Run
-    {
-        int dataFileID;
-        string type;
-        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
-        double EndAvg = 0, contactSwitch = 0;
+    //    public Run(string algo, int dataFile)
+    //    {
+    //        type = algo;
+    //        dataFileID = dataFile;
+    //    }
+    //    public void getAverages(ref DataFile dataInfo)
+    //    {
+    //        List<double> avgs = new List<double>();
 
-        public Run(string algo, int dataFile)
-        {
-            type = algo;
-            dataFileID = dataFile;
-        }
-        public void getAverages(ref DataFile dataInfo)
-        {
-            List<double> avgs = new List<double>();
+    //        avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
+    //        ResponseAvg = avgs[0];
+    //        TurnAroundAvg = avgs[1];
+    //        StartAvg = avgs[2];
+    //        EndAvg = avgs[3];
+    //        contactSwitch = avgs[4];
+    //    }
 
-            avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
-            ResponseAvg = avgs[0];
-            TurnAroundAvg = avgs[1];
-            StartAvg = avgs[2];
-            EndAvg = avgs[3];
-            contactSwitch = avgs[4];
-        }
-
-        public void outputInfo(ref DataFile dataInfo)
-        {
-            getAverages(ref dataInfo);
-            Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
-            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t\t{2}\nEnding Time Average: \t{3}\n" + 
-                "Average Contact Switches: \t{4}\n\n",
-                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
-        }
-    }
+    //    public void outputInfo(ref DataFile dataInfo)
+    //    {
+    //        getAverages(ref dataInfo);
+    //        Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
+    //        Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n" + 
+    //            "Average Contact Switches: \t{4}\n\n",
+    //            ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
+    //    }
+    //}
 
     class DataFile
     {
@@ -61,26 +60,26 @@ namespace Sim
         /// make the data files for the program. Short sweet, to the point...datafile
         /// the order is PID, arrivalTime, then the bursts
         /// </summary>
-        public void MakeDataFile()
+        public string MakeDataFile(int fileIndex)
         {
 
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            using (StreamWriter data = new StreamWriter(mydocpath + @"\results.txt"))
+            string filePath = mydocpath + @"\input" + fileIndex + ".txt";
+            using (StreamWriter data = new StreamWriter(filePath))
             {
                 Random inputs = new Random();
-                int processes = inputs.Next(1, 150);
+                int processes = inputs.Next(1, 50);
                 for (int i = 0; i < processes; i++)
                 {
                     // PID is i, 10 random bursts
                     // random number for arrival time
                     data.Write(i + " ");
-                    int time = inputs.Next(1, 50);
+                    int time = inputs.Next(1, 100);
                     data.Write(time + " "); // arrival time
-                    int bursts = inputs.Next(1, 30);
+                    int bursts = inputs.Next(1, 20);
                     for (int j = 0; j < bursts; j++)
                     {
-                        time = inputs.Next(1, 200);
+                        time = inputs.Next(1, 30);
                         data.Write(time + " ");
                     }
                     data.Write("\n");
@@ -88,6 +87,7 @@ namespace Sim
                 data.Close();
 
             }
+            return filePath;
         }
         /// <summary>
         /// Info is stored in PCB, it's constructor asks for all 
@@ -95,12 +95,12 @@ namespace Sim
         /// with the PID as the key.
         /// Lastly, this function makes the pairs for the ready queue of the submit times and the PID
         /// </summary>
-        public void getInfoFromFile()
+        public void getInfoFromFile(int fileIndex)
         {
             
             importantInfo.Clear();
             submitTimes.Clear();
-            string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\results.txt");
+            string[] lines = System.IO.File.ReadAllLines(mydocpath + @"\input" + fileIndex + ".txt");
             foreach (string line in lines)
             {
                 string[] difValues = line.Split(' ');
