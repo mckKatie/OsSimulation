@@ -134,7 +134,7 @@ namespace Sim
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(processData.Item2);
             temp.ProcessorInitiate(clock);
-            return processData;
+            return new Tuple<int, int>(processData.Item1 + clock, processData.Item2);
         }
         override public void ProcessReadyQueue(int PID)
         {
@@ -164,15 +164,17 @@ namespace Sim
                 completionTimes.Add(readyList[i].Item1 + currentTime);
             }
             completionTimes.Sort();
-            int interruptMarker = completionTimes[processors.Count - 1];
-            foreach (Processor p in processors)
+            if (completionTimes.Count > processors.Count)
             {
-                if (p.getCompletionTime() > interruptMarker && p.isBusy())
+                int interruptMarker = completionTimes[processors.Count - 1];
+                foreach (Processor p in processors)
                 {
-                    p.InterruptProcess();
+                    if (p.getCompletionTime() > interruptMarker && p.isBusy())
+                    {
+                        p.InterruptProcess();
+                    }
                 }
             }
-
         }
     }
 
