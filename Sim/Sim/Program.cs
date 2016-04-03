@@ -98,7 +98,7 @@ namespace Sim
             FCFS algo1 = new FCFS(filePath, processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo1.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -107,7 +107,7 @@ namespace Sim
             RR algo2 = new RR(filePath, processors, quantum);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo2.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -116,7 +116,7 @@ namespace Sim
             SPN algo = new SPN(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -125,7 +125,7 @@ namespace Sim
             STR algo = new STR(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
         static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
@@ -133,7 +133,7 @@ namespace Sim
             HRRN algo = new HRRN(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
         static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantumTimes)
@@ -142,7 +142,7 @@ namespace Sim
             MLFB algo = new MLFB(filePath, processors, quantumTimes);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
     }
