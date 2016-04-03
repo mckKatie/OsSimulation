@@ -14,15 +14,18 @@ namespace Sim
         public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
         public List<Processor> processors;
+        Strategy strat;
+        string inputFileName;
 
-
-        public SimManager(int numProcessors)
+        public SimManager(int numProcessors, Strategy _strat)
         {
             processes = new Dictionary<int,ProcessControlBlock>();
             subTimes = new List<Tuple<int,int>>();
             IOList = new List<Tuple<int,int>>();
             processors = new List<Processor>();
             clock = 0;
+            strat = _strat;
+            inputFileName = "";
             for(int i = 0; i < numProcessors; i++)
             {
                 processors.Add(new Processor(i));
@@ -31,14 +34,25 @@ namespace Sim
 
         }
 
-        public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to hard copy data if running in parallel
+        //public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
+        //{
+        //    foreach (KeyValuePair<int, ProcessControlBlock> kvp in procs)
+        //        processes.Add(kvp.Key, new ProcessControlBlock(kvp.Value.getSubmitted(), kvp.Value.getPID(), kvp.Value.getBursts()));
+        //    foreach (Tuple<int, int> s in subs)
+        //        subTimes.Add(new Tuple<int, int>(s.Item1, s.Item2));
+        //    subTimes.Sort();
+        //}
+        public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
         {
             processes = procs;
-            subTimes = subs;
+            foreach (Tuple<int, int> p in subs)
+            {
+                subTimes.Add(new Tuple<int, int>(p.Item1, p.Item2));
+            }
             subTimes.Sort();
         }
 
-        public void RunSimulation()
+        public Run RunSimulation()
         {
             while (true)
             {
@@ -60,6 +74,10 @@ namespace Sim
                 {
                     continue;
                 }
+                else if(IOList.Count != 0)
+                {
+                    continue;
+                }
                 else if(!ReadyQueueEmpty())
                 {
                     continue;
@@ -70,7 +88,23 @@ namespace Sim
                 }
                 break;
             }
+            return ComposeResults();
         }
+
+        private Run ComposeResults()   //use this function to make run instance
+        {
+            Run temp = new Run(getStrategy(), inputFileName, processes);
+            ResetPCBs();
+            return temp;
+        }
+        private void ResetPCBs()
+        {
+            foreach (KeyValuePair<int, ProcessControlBlock> kvp in processes)
+            {
+                kvp.Value.ResetPCB();
+            }
+        }
+        private Strategy getStrategy() { return strat; }
         public ProcessControlBlock getProcessByID(int pid)
         {
             ProcessControlBlock temp;
@@ -88,7 +122,7 @@ namespace Sim
                     temp.CPUFinish(clock);
                     if(temp.isIO())
                         StartIO(id);
-                    p.SwapContexts();   
+                    p.SwapContexts();
                 }
             }
         }
@@ -177,6 +211,7 @@ namespace Sim
         abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
         abstract public void MarkInterrupts(int currentTime);
         abstract public bool ReadyQueueEmpty();
+
     }
  
 }

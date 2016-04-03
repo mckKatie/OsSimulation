@@ -9,39 +9,39 @@ using System.IO;
 namespace Sim
 {
 
-    class Run
-    {
-        int dataFileID;
-        string type;
-        double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
-        double EndAvg = 0, contactSwitch = 0;
+    //class Run
+    //{
+    //    int dataFileID;
+    //    string type;
+    //    double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
+    //    double EndAvg = 0, contactSwitch = 0;
 
-        public Run(string algo, int dataFile)
-        {
-            type = algo;
-            dataFileID = dataFile;
-        }
-        public void getAverages(ref DataFile dataInfo)
-        {
-            List<double> avgs = new List<double>();
+    //    public Run(string algo, int dataFile)
+    //    {
+    //        type = algo;
+    //        dataFileID = dataFile;
+    //    }
+    //    public void getAverages(ref DataFile dataInfo)
+    //    {
+    //        List<double> avgs = new List<double>();
 
-            avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
-            ResponseAvg = avgs[0];
-            TurnAroundAvg = avgs[1];
-            StartAvg = avgs[2];
-            EndAvg = avgs[3];
-            contactSwitch = avgs[4];
-        }
+    //        avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
+    //        ResponseAvg = avgs[0];
+    //        TurnAroundAvg = avgs[1];
+    //        StartAvg = avgs[2];
+    //        EndAvg = avgs[3];
+    //        contactSwitch = avgs[4];
+    //    }
 
-        public void outputInfo(ref DataFile dataInfo)
-        {
-            getAverages(ref dataInfo);
-            Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
-            Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n" + 
-                "Average Contact Switches: \t{4}\n\n",
-                ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
-        }
-    }
+    //    public void outputInfo(ref DataFile dataInfo)
+    //    {
+    //        getAverages(ref dataInfo);
+    //        Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
+    //        Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n" + 
+    //            "Average Contact Switches: \t{4}\n\n",
+    //            ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
+    //    }
+    //}
 
     class DataFile
     {
