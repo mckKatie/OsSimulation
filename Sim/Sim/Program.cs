@@ -13,11 +13,15 @@ namespace Sim
         static void Main(string[] args)
         {
             runs = new List<Run>();
-            int fileIndex = 1;
+            int fileIndex = 10;
             while (fileIndex > 0)
             {
                 DataFile dataInfo = new DataFile();
-                string filePath = dataInfo.MakeDataFile(fileIndex);
+                // order of numbers is cpuburst, ioburst, numBursts, arrivalTime, and number of proceducers
+                Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 50);
+                Tuple<int, int> IOBurst = new Tuple<int, int>(10, 50);
+
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 50, 150);
                 dataInfo.getInfoFromFile(fileIndex);
 
                 string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
@@ -98,7 +102,7 @@ namespace Sim
             FCFS algo1 = new FCFS(filePath, processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo1.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -107,7 +111,7 @@ namespace Sim
             RR algo2 = new RR(filePath, processors, quantum);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo2.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -116,7 +120,7 @@ namespace Sim
             SPN algo = new SPN(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -125,7 +129,7 @@ namespace Sim
             STR algo = new STR(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
         static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
@@ -133,7 +137,7 @@ namespace Sim
             HRRN algo = new HRRN(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
         static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantumTimes)
@@ -142,7 +146,7 @@ namespace Sim
             MLFB algo = new MLFB(filePath, processors, quantumTimes);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
-            newRun.outputInfo();
+            //newRun.outputInfo();
             runs.Add(newRun);
         }
     }

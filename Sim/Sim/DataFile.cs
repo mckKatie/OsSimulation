@@ -8,40 +8,6 @@ using System.IO;
 
 namespace Sim
 {
-    //class Run
-    //{
-    //    int dataFileID;
-    //    string type;
-    //    double ResponseAvg = 0, TurnAroundAvg = 0, StartAvg = 0;
-    //    double EndAvg = 0, contactSwitch = 0;
-
-    //    public Run(string algo, int dataFile)
-    //    {
-    //        type = algo;
-    //        dataFileID = dataFile;
-    //    }
-    //    public void getAverages(ref DataFile dataInfo)
-    //    {
-    //        List<double> avgs = new List<double>();
-
-    //        avgs = Analysis.DisplayAverages(dataInfo.getDictionary());
-    //        ResponseAvg = avgs[0];
-    //        TurnAroundAvg = avgs[1];
-    //        StartAvg = avgs[2];
-    //        EndAvg = avgs[3];
-    //        contactSwitch = avgs[4];
-    //    }
-
-    //    public void outputInfo(ref DataFile dataInfo)
-    //    {
-    //        getAverages(ref dataInfo);
-    //        Console.WriteLine("\nFor datafile {0} and scheduling algorith {1}...", dataFileID, type);
-    //        Console.Write("Response Avgerage: \t{0}\nTurnaround Average: \t{1}\nStart Average: \t{2}\nEnding Time Average: \t{3}\n" + 
-    //            "Average Contact Switches: \t{4}\n\n",
-    //            ResponseAvg, TurnAroundAvg, StartAvg, EndAvg, contactSwitch);
-    //    }
-    //}
-
     class DataFile
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -56,11 +22,13 @@ namespace Sim
         {
             return submitTimes;
         }
+
         /// <summary>
         /// make the data files for the program. Short sweet, to the point...datafile
         /// the order is PID, arrivalTime, then the bursts
         /// </summary>
-        public string MakeDataFile(int fileIndex)
+        public string MakeDataFile(int fileIndex, Tuple<int,int> cpuBurst, 
+            Tuple<int,int> ioBurst, int numBursts, int arrivalT, int numProc)
         {
 
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -69,19 +37,20 @@ namespace Sim
             using (StreamWriter data = new StreamWriter(filePath))
             {
                 Random inputs = new Random();
-                int processes = inputs.Next(1, 5);
+                int processes = inputs.Next(1, numProc);
                 for (int i = 0; i < processes; i++)
                 {
                     // PID is i, 10 random bursts
                     // random number for arrival time
                     data.Write(i + " ");
-                    int time = inputs.Next(1, 5);
+                    int time = inputs.Next(1, arrivalT);
                     data.Write(time + " "); // arrival time
-                    int bursts = inputs.Next(1, 3);
-                    for (int j = 0; j < bursts; j++)
+                    int bursts = inputs.Next(1, numBursts);
+                    for (int j = 0; j < bursts; j = j + 2)
                     {
-                        time = inputs.Next(1, 10);
+                        time = inputs.Next(cpuBurst.Item1, cpuBurst.Item2);
                         data.Write(time + " ");
+                        time = inputs.Next(ioBurst.Item1, ioBurst.Item2);
                     }
                     data.Write("\n");
                 }
