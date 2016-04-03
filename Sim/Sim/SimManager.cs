@@ -10,7 +10,7 @@ namespace Sim
     {
 
         public int clock;
-        public Dictionary<int, ProcessControlBLock> processes;
+        public Dictionary<int, ProcessControlBlock> processes;
         public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
         public List<Processor> processors;
@@ -18,7 +18,7 @@ namespace Sim
 
         public SimManager(int numProcessors)
         {
-            processes = new Dictionary<int,ProcessControlBLock>();
+            processes = new Dictionary<int,ProcessControlBlock>();
             subTimes = new List<Tuple<int,int>>();
             IOList = new List<Tuple<int,int>>();
             processors = new List<Processor>();
@@ -31,7 +31,7 @@ namespace Sim
 
         }
 
-        public void getInfo(Dictionary<int, ProcessControlBLock> procs, List<Tuple<int, int>> subs) // need to hard copy data if running in parallel
+        public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to hard copy data if running in parallel
         {
             processes = procs;
             subTimes = subs;
@@ -71,9 +71,9 @@ namespace Sim
                 break;
             }
         }
-        public ProcessControlBLock getProcessByID(int pid)
+        public ProcessControlBlock getProcessByID(int pid)
         {
-            ProcessControlBLock temp;
+            ProcessControlBlock temp;
             processes.TryGetValue(pid, out temp);
             return temp;
         }
@@ -84,9 +84,9 @@ namespace Sim
                 if(p.BurstCompleteCheck(clock)) // this will toggle processor status to stop if Burst Cmpleted
                 {
                     int id = p.getPID();
-                    ProcessControlBLock temp = getProcessByID(id);
+                    ProcessControlBlock temp = getProcessByID(id);
                     temp.CPUFinish(clock);
-                    if(temp.getState() == state.io)
+                    if(temp.isIO())
                         StartIO(id);
                     p.SwapContexts();   
                 }
@@ -97,7 +97,7 @@ namespace Sim
         {
             foreach (Processor p in processors)
             {
-                if (p.getState() == Pstate.swapping)
+                if (p.isSwapping())
                 {
                     p.FreeProcessor();
                 }
@@ -109,12 +109,12 @@ namespace Sim
             {
                 if(procList[0].Item1 == clock)
                 {
-                    ProcessControlBLock temp = getProcessByID(procList[0].Item2);
+                    ProcessControlBlock temp = getProcessByID(procList[0].Item2);
                     if(Object.ReferenceEquals(procList, IOList))
                     {
                         temp.IOFinish(clock);
                     }
-                    if(temp.getState() == state.ready)
+                    if(temp.isReady())
                         ProcessReadyQueue(procList[0].Item2);
                     procList.RemoveAt(0);
                     continue;
@@ -125,7 +125,7 @@ namespace Sim
 
         public void StartIO(int PID) // looks up processes and places id and time of io completion into list, then sorts
         {
-            ProcessControlBLock temp = getProcessByID(PID);
+            ProcessControlBlock temp = getProcessByID(PID);
             int burstDuration = temp.getNextBurst();
             int burstCompletionTime = clock + burstDuration;
 
@@ -137,7 +137,7 @@ namespace Sim
         {
             foreach (Processor p in processors)
             {
-                if( p.getState() == Pstate.open && !ReadyQueueEmpty())
+                if( p.isOpen() && !ReadyQueueEmpty())
                 {
                     p.AssignProcess(ProcessOpenProcessor(p.getProcID()));
                 }
@@ -147,7 +147,7 @@ namespace Sim
         {
             foreach(Processor p in processors)
             {
-                if (p.getState() != Pstate.open)
+                if (!p.isOpen())
                     return false;
             }
             return true;
@@ -156,7 +156,7 @@ namespace Sim
         public void InterruptProcessor(Processor p) // changes processor state and has pcb execute interruption handling
         {
             int pid = p.getPID();
-            ProcessControlBLock temp = getProcessByID(pid);
+            ProcessControlBlock temp = getProcessByID(pid);
             temp.CPUInterrupt(clock);
             ProcessReadyQueue(pid); 
         }
@@ -164,7 +164,7 @@ namespace Sim
         {
             foreach (Processor p in processors)
             {
-                if(p.getState() == Pstate.interrupted)
+                if(p.isInterrupted())
                 {
                     InterruptProcessor(p);
                     p.SwapContexts();

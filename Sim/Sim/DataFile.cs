@@ -46,10 +46,10 @@ namespace Sim
     class DataFile
     {
         string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        Dictionary<int, ProcessControlBLock> importantInfo = new Dictionary<int, ProcessControlBLock>();
+        Dictionary<int, ProcessControlBlock> importantInfo = new Dictionary<int, ProcessControlBlock>();
         List<Tuple<int, int>> submitTimes = new List<Tuple<int, int>>();
 
-        public Dictionary<int, ProcessControlBLock> getDictionary()
+        public Dictionary<int, ProcessControlBlock> getDictionary()
         {
             return importantInfo;
         }
@@ -121,7 +121,7 @@ namespace Sim
 
                 //////////// pid is stored twice, once in PCB and once in the dictionary
                 ///////////// might be able to remove it from PCB
-                ProcessControlBLock newProcess = new ProcessControlBLock(submitted,PID,bursts); 
+                ProcessControlBlock newProcess = new ProcessControlBlock(submitted,PID,bursts); 
                 importantInfo.Add(PID, newProcess);
                 submitTimes.Add(new Tuple<int,int>(submitted, PID));
 

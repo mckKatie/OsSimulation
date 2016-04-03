@@ -6,75 +6,76 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    public class Metadata
-    {
-        public int submitted;
-        public int completed;
-
-        public int response;
-        public int execution;
-        public int wait;
-        public int io;
-
-        public int timesSwapped;
-
-        public int burstMarker;
-
-        public Metadata(int submitTime)
+        public class Metadata
         {
-            submitted = submitTime;
-            execution = 0;
-            wait = 0;
-            io = 0;
-            timesSwapped = 0;
+            public int submitted;
+            public int completed;
 
-            response = -1;
+            public int response;
+            public int execution;
+            public int wait;
+            public int io;
 
-            burstMarker = submitted;
-        }
+            public int timesSwapped;
 
-        public int UpdateLog(state currentState, int currentTime)
-        {
-            int prevBurstDuration = getDuration(currentTime);
-            burstMarker = currentTime;  // reassign burstmarker to start tracking the next burst/wait period
+            public int burstMarker;
 
-            if (currentState == state.ready)
+            public Metadata(int submitTime)
             {
-                wait += prevBurstDuration;
+                submitted = submitTime;
+                execution = 0;
+                wait = 0;
+                io = 0;
+                timesSwapped = 0;
+
+                response = -1;
+
+                burstMarker = submitted;
             }
-            else if (currentState == state.running)
+
+            public int UpdateLog(ProcessControlBlock pcb, int currentTime)
             {
-                execution += prevBurstDuration;
+                int prevBurstDuration = getDuration(currentTime);
+                burstMarker = currentTime;  // reassign burstmarker to start tracking the next burst/wait period
+
+                if (pcb.isReady())
+                {
+                    wait += prevBurstDuration;
+                }
+                else if (pcb.isRunning())
+                {
+                    execution += prevBurstDuration;
+                }
+                else if (pcb.isIO())
+                {
+                    io += prevBurstDuration;
+                }
+                return prevBurstDuration;
             }
-            else if (currentState == state.io)
+
+            private int getDuration(int currentTime)
             {
-                io += prevBurstDuration;
+                return currentTime - burstMarker;
             }
-            return prevBurstDuration; 
-        }
-
-        private int getDuration(int currentTime)
-        {
-            return currentTime - burstMarker;
-        }
 
 
 
-        public int getResponse()
-        {
-            return response;
+            public int getResponse()
+            {
+                return response;
+            }
+            public void setResponse(int currentTime)
+            {
+                response = currentTime - submitted;
+            }
+            public void setCompleted(int currentTime)
+            {
+                completed = currentTime;
+            }
+            public int getCompleted()
+            {
+                return completed;
+            }
         }
-        public void setResponse(int currentTime)
-        {
-            response = currentTime - submitted;
-        }
-        public void setCompleted(int currentTime)
-        {
-            completed = currentTime;
-        }
-        public int getCompleted()
-        {
-            return completed;
-        }
-    }
+    
 }
