@@ -42,6 +42,8 @@ namespace Sim
         }
         public override void MarkInterrupts() {}
         public override void AddAdditionalMetadata(Run run) { }
+        public override void AddTierMapping(int id) { }
+
     }
 
     public class RR : SimManager
@@ -96,6 +98,8 @@ namespace Sim
         {
             run.setQuantum(quantum);
         }
+        public override void AddTierMapping(int id) { }
+
     }
 
     public class SPN : SimManager
@@ -132,6 +136,8 @@ namespace Sim
         }
         override public void MarkInterrupts() { }
         override public void AddAdditionalMetadata(Run run) { }
+        public override void AddTierMapping(int id) { }
+
     }
 
     public class STR : SimManager
@@ -193,6 +199,8 @@ namespace Sim
             }
         }
         override public void AddAdditionalMetadata(Run run) { }
+        public override void AddTierMapping(int id) { }
+
     }
 
     public class HRRN : SimManager
@@ -257,6 +265,7 @@ namespace Sim
         }
         override public void MarkInterrupts() { }
         public override void AddAdditionalMetadata(Run run) { }
+        public override void AddTierMapping(int id){ }
        
     }
     public class MLFB : SimManager
@@ -266,12 +275,13 @@ namespace Sim
         List<int> quantum;
         List<int> processorQuantumEnd;
 
-        public MLFB(string filePath, int numProcessors, List<int> _quantums) : base(filePath, numProcessors, Strategy.MLFB)
+        public MLFB(string filePath, int numProcessors, List<int> _quantums)
+            : base(filePath, numProcessors, Strategy.MLFB)
         {
             quantum = _quantums;
 
             queueList = new List<Queue<int>>();
-            for (int i = 0; i < quantum.Count + 1; i++ )
+            for (int i = 0; i < quantum.Count + 1; i++)
                 queueList.Add(new Queue<int>());
 
             processorQuantumEnd = new List<int>();
@@ -280,10 +290,17 @@ namespace Sim
                 processorQuantumEnd.Add(0);
             }
             processTierMap = new Dictionary<int, int>();
-            foreach(KeyValuePair<int, ProcessControlBlock> kvp in processes)
+
+        }
+
+        private int getQueueVolume()
+        {
+            int num = 0;
+            foreach (Queue<int> q in queueList)
             {
-                processTierMap.Add(kvp.Key, 0);
+                num += q.Count;
             }
+            return num;
         }
         override public Tuple<int, int> ProcessOpenProcessor(int id) //processor id
         {
@@ -296,7 +313,12 @@ namespace Sim
                     ProcessControlBlock temp = getProcessByID(pid);
                     temp.ProcessorInitiate(clock);
                     int burstTime = temp.getNextBurst();
-                    processorQuantumEnd[id] = (quantum[tier] + clock);
+                    int quantumDuration;
+                    if (tier == quantum.Count)
+                        quantumDuration = -1;
+                    else
+                        quantumDuration = quantum[tier];
+                    processorQuantumEnd[id] = (quantumDuration + clock);
                     return new Tuple<int, int>(burstTime + clock, pid);
                 }
             }
@@ -309,20 +331,21 @@ namespace Sim
         public override void UpdateReadyQueue() { }
         override public bool ReadyQueueEmpty() //finished
         {
-            foreach(Queue<int> q in queueList)
+            foreach (Queue<int> q in queueList)
             {
-                if(q.Count != 0)
+                if (q.Count != 0)
                     return false;
             }
             return true;
         }
         override public void MarkInterrupts()
         {
-            int numWaiting = readyQueue.Count;
+            int numWaiting = getQueueVolume();
             for (int i = 0; i < processors.Count; i++)
             {
                 if (processorQuantumEnd[i] == clock && processors[i].isBusy() && numWaiting > 0)
                 {
+                    processTierMap[processors[i].getPID()] = processTierMap[processors[i].getPID()] + 1;
                     processors[i].InterruptProcess();
                     numWaiting--;
                 }
@@ -330,8 +353,11 @@ namespace Sim
         }
         override public void AddAdditionalMetadata(Run run)
         {
-            run.setQuantum(quantum);
+            run.setQuantums(quantum);
+        }
+        override public  void AddTierMapping(int id)
+        {
+            processTierMap.Add(id, 0);
         }
     }
-
 }

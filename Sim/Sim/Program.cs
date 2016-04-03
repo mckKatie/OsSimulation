@@ -61,7 +61,11 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// HRRN
-                RunHRRN(ref dataInfo, filePath, 1);
+                //RunHRRN(ref dataInfo, filePath, 1);
+
+                /////////// MLFB
+                List<int> qTimes = new List<int>() {5, 10 };
+                RunMLFB(ref dataInfo, filePath, 1, qTimes);
                 fileIndex--;
             }
             Console.WriteLine("Check your document folder for results.txt and the corresponding datafile");
@@ -105,6 +109,15 @@ namespace Sim
         static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
         {
             HRRN algo = new HRRN(filePath, processors);
+            algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
+            runs.Add(newRun);
+        }
+        static public void RunMLFB(ref DataFile dataInfo, string filePath, int processors, List<int> quantumTimes)
+        {
+
+            MLFB algo = new MLFB(filePath, processors, quantumTimes);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             newRun.outputInfo();

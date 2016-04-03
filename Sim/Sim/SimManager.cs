@@ -48,6 +48,7 @@ namespace Sim
             foreach (Tuple<int, int> p in subs)
             {
                 subTimes.Add(new Tuple<int, int>(p.Item1, p.Item2));
+                AddTierMapping(p.Item2);
             }
             subTimes.Sort();
         }
@@ -215,7 +216,7 @@ namespace Sim
         abstract public bool ReadyQueueEmpty();
         abstract public void UpdateReadyQueue();
         abstract public void AddAdditionalMetadata(Run run);
-
+        abstract public void AddTierMapping(int id);
     }
  
 }
