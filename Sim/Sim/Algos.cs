@@ -13,8 +13,8 @@ namespace Sim
     {
         Queue<int> readyQueue;
 
-        public FCFS(string filePath, int numProcessors)
-            : base(filePath, numProcessors, Strategy.FCFS)
+        public FCFS(string filePath, int numProcessors, List<int> quantum)
+            : base(filePath, numProcessors, Strategy.FCFS, quantum)
         {
             readyQueue = new Queue<int>();
         }
@@ -41,7 +41,6 @@ namespace Sim
             return false;
         }
         public override void MarkInterrupts() {}
-        public override void AddAdditionalMetadata(Run run) { }
         public override void AddTierMapping(int id) { }
 
     }
@@ -50,10 +49,8 @@ namespace Sim
     {
         Queue<int> readyQueue;
         List<int> processorQuantumEnd;
-        int quantum;
-        public RR(string filePath, int numProcessors, int _quantum) : base(filePath, numProcessors, Strategy.RR)
+        public RR(string filePath, int numProcessors, List<int> quantum) : base(filePath, numProcessors, Strategy.RR, quantum)
         {
-            quantum = _quantum;
             readyQueue = new Queue<int>();
             processorQuantumEnd = new List<int>();
             for(int i = 0; i < processors.Count; i++ )
@@ -68,7 +65,7 @@ namespace Sim
             ProcessControlBlock temp = getProcessByID(pid);
             temp.ProcessorInitiate(clock);
             int burstTime = temp.getNextBurst();
-            processorQuantumEnd[id] = (quantum + clock);
+            processorQuantumEnd[id] = (quantum[0] + clock);
             return new Tuple<int, int>(burstTime + clock, pid);
         }
         override public void ProcessReadyQueue(int PID)
@@ -94,10 +91,6 @@ namespace Sim
                 }
             }
         }
-        override public void AddAdditionalMetadata(Run run)
-        {
-            run.setQuantum(quantum);
-        }
         public override void AddTierMapping(int id) { }
 
     }
@@ -105,7 +98,7 @@ namespace Sim
     public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        public SPN(string filePath, int numProcessors) : base(filePath, numProcessors, Strategy.SPN)
+        public SPN(string filePath, int numProcessors, List<int> quantum) : base(filePath, numProcessors, Strategy.SPN, quantum)
         {
             readyList = new List<Tuple<int, int>>();
         }
@@ -135,7 +128,6 @@ namespace Sim
             return false;
         }
         override public void MarkInterrupts() { }
-        override public void AddAdditionalMetadata(Run run) { }
         public override void AddTierMapping(int id) { }
 
     }
@@ -143,7 +135,7 @@ namespace Sim
     public class STR : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-        public STR(string filePath, int numProcessors) : base(filePath, numProcessors, Strategy.STR)
+        public STR(string filePath, int numProcessors, List<int> quantum) : base(filePath, numProcessors, Strategy.STR, quantum)
         {
             readyList = new List<Tuple<int, int>>();
         }
@@ -198,7 +190,6 @@ namespace Sim
                 }
             }
         }
-        override public void AddAdditionalMetadata(Run run) { }
         public override void AddTierMapping(int id) { }
 
     }
@@ -229,7 +220,7 @@ namespace Sim
             public double getValue() { return value; }
         }
         List<ReadyQueueEntry> readyList;
-        public HRRN(string filePath, int numProcessors): base(filePath, numProcessors, Strategy.HRRN)
+        public HRRN(string filePath, int numProcessors, List<int>quantum): base(filePath, numProcessors, Strategy.HRRN, quantum)
         {
             readyList = new List<ReadyQueueEntry>();
         }
@@ -264,7 +255,6 @@ namespace Sim
             readyList = readyList.OrderByDescending(v => v.getValue()).ToList();
         }
         override public void MarkInterrupts() { }
-        public override void AddAdditionalMetadata(Run run) { }
         public override void AddTierMapping(int id){ }
        
     }
@@ -272,13 +262,11 @@ namespace Sim
     {
         Dictionary<int, int> processTierMap;
         List<Queue<int>> queueList;
-        List<int> quantum;
         List<int> processorQuantumEnd;
 
-        public MLFB(string filePath, int numProcessors, List<int> _quantums)
-            : base(filePath, numProcessors, Strategy.MLFB)
+        public MLFB(string filePath, int numProcessors, List<int> quantum)
+            : base(filePath, numProcessors, Strategy.MLFB, quantum)
         {
-            quantum = _quantums;
 
             queueList = new List<Queue<int>>();
             for (int i = 0; i < quantum.Count + 1; i++)
@@ -350,10 +338,6 @@ namespace Sim
                     numWaiting--;
                 }
             }
-        }
-        override public void AddAdditionalMetadata(Run run)
-        {
-            run.setQuantums(quantum);
         }
         override public  void AddTierMapping(int id)
         {
