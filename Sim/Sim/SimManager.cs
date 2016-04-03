@@ -63,12 +63,13 @@ namespace Sim
                 CheckForProcesses(IOList);
                 //check for completed processes, interrupt if necessary
                 CheckProcessorStatus();
-                MarkInterrupts(clock);
+                MarkInterrupts();
                 //handle interrupted processes
                 HandleInterrupts();
                 //submit new processes
                 CheckForProcesses(subTimes);
                 //assign to free processors
+                UpdateReadyQueue();
                 AssignFreeProcessors();
                 if(subTimes.Count != 0)
                 {
@@ -212,6 +213,7 @@ namespace Sim
         abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
         abstract public void MarkInterrupts();
         abstract public bool ReadyQueueEmpty();
+        abstract public void UpdateReadyQueue();
         abstract public void AddAdditionalMetadata(Run run);
 
     }

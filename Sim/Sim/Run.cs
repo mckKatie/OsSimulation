@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum Strategy { FCFS, RR, SPN, STR }
 
 namespace Sim
 {
