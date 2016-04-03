@@ -28,7 +28,7 @@ namespace Sim
                 }
 
                 /////////// FCFS
-                RunFCFS(ref dataInfo, filePath, 1);
+                //RunFCFS(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 //////////// FCFS multiprocessor
@@ -36,8 +36,13 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
+<<<<<<< HEAD
+                //RunRR(ref dataInfo, filePath, 1, 10);
+              
+=======
                 RunRR(ref dataInfo, filePath, 1, 10);
 
+>>>>>>> 3e9390bea60b631778e66bfca6c9a835cae47d43
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
 
@@ -46,7 +51,7 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// SPN 
-                RunSPN(ref dataInfo, filePath, 1);
+                //RunSPN(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 /////////// SPN multiprocessor
@@ -54,13 +59,15 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// STR 
-                RunSTR(ref dataInfo, filePath, 1);
+                //RunSTR(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
 
                 /////////// STR multiprocessor
                 //RunSTR(ref dataInfo, dataFiles, 4);
                 //dataInfo.getInfoFromFile();
 
+                /////////// HRRN
+                RunHRRN(ref dataInfo, filePath, 1);
                 fileIndex--;
             }
             Console.WriteLine("Check your document folder for results.txt and the corresponding datafile");
@@ -101,6 +108,13 @@ namespace Sim
             newRun.outputInfo();
             runs.Add(newRun);
         }
-
+        static public void RunHRRN(ref DataFile dataInfo, string filePath, int processors)
+        {
+            HRRN algo = new HRRN(filePath, processors);
+            algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
+            runs.Add(newRun);
+        }
     }
 }
