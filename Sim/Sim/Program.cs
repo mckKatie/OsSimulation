@@ -13,11 +13,15 @@ namespace Sim
         static void Main(string[] args)
         {
             runs = new List<Run>();
-            int fileIndex = 1;
+            int fileIndex = 10;
             while (fileIndex > 0)
             {
                 DataFile dataInfo = new DataFile();
-                string filePath = dataInfo.MakeDataFile(fileIndex);
+                // order of numbers is cpuburst, ioburst, numBursts, arrivalTime, and number of proceducers
+                Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 50);
+                Tuple<int, int> IOBurst = new Tuple<int, int>(10, 50);
+
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 50, 150);
                 dataInfo.getInfoFromFile(fileIndex);
 
                 string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
