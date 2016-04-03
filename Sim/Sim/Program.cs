@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Sim
 {
@@ -19,6 +20,13 @@ namespace Sim
                 string filePath = dataInfo.MakeDataFile(fileIndex);
                 dataInfo.getInfoFromFile(fileIndex);
 
+                string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+
+                using (StreamWriter outputFile = File.AppendText(mydocpath))
+                {
+                    outputFile.WriteLine("\nThese are the results from Datafile number {0}", fileIndex);
+                }
+
                 /////////// FCFS
                 RunFCFS(ref dataInfo, filePath, 1);
                 //dataInfo.getInfoFromFile();
@@ -29,7 +37,7 @@ namespace Sim
 
                 /////////// RR
                 RunRR(ref dataInfo, filePath, 1, 10);
-              
+
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
 
@@ -55,13 +63,14 @@ namespace Sim
 
                 fileIndex--;
             }
+            Console.WriteLine("Check your document folder for results.txt and the corresponding datafile");
         }
 
         static public void RunFCFS(ref DataFile dataInfo, string filePath, int processors)
         {
             FCFS algo1 = new FCFS(filePath, processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            Run newRun =  algo1.RunSimulation();
+            Run newRun = algo1.RunSimulation();
             newRun.outputInfo();
             runs.Add(newRun);
         }
