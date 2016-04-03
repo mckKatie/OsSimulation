@@ -6,7 +6,22 @@ using System.Threading.Tasks;
 
 namespace Sim
 {
-    class ReducedAnalysis
+    public static class ReducedAnalysis
     {
+        struct StrategyInfo
+        {
+            Strategy strat;
+            int numProcessors;
+            List<int> quantums;
+            double turnaroundTime;
+            double waitTime;
+            double simulationTime;
+            double throughput;
+            double responseTime;
+        }
+        public static void ComputeReducedAverages(List<Run> runs)
+        {
+
+        }
     }
 }
