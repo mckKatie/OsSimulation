@@ -20,11 +20,16 @@ namespace Sim
         double responseAvg = 0, turnAroundAvg = 0, startAvg = 0;
         double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0;
 
-        public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs)
+        public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors)
         {
             strat = _strat;
             dataFile = _dataFile;
+            numProcessors = _numProcessors;
             computeAverages(procs);
+        }
+        public void setQuantum(int q)
+        {
+            quantum = q;
         }
         public void computeAverages(Dictionary<int, ProcessControlBlock> procs)
         {

@@ -68,7 +68,7 @@ namespace Sim
 
         static public void RunFCFS(ref DataFile dataInfo, string filePath, int processors)
         {
-            FCFS algo1 = new FCFS(processors);
+            FCFS algo1 = new FCFS(filePath, processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo1.RunSimulation();
             newRun.outputInfo();
@@ -77,7 +77,7 @@ namespace Sim
 
         static public void RunRR(ref DataFile dataInfo, string filePath, int processors, int quantum)
         {
-            RR algo2 = new RR(processors, quantum);
+            RR algo2 = new RR(filePath, processors, quantum);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo2.RunSimulation();
             newRun.outputInfo();
@@ -86,7 +86,7 @@ namespace Sim
 
         static public void RunSPN(ref DataFile dataInfo, string filePath, int processors)
         {
-            SPN algo = new SPN(processors);
+            SPN algo = new SPN(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             newRun.outputInfo();
@@ -95,7 +95,7 @@ namespace Sim
 
         static public void RunSTR(ref DataFile dataInfo, string filePath, int processors)
         {
-            STR algo = new STR(processors);
+            STR algo = new STR(filePath, processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo.RunSimulation();
             newRun.outputInfo();
