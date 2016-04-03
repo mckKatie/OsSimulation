@@ -16,14 +16,16 @@ namespace Sim
             while (dataFiles > 0)
             {
                 DataFile dataInfo = new DataFile();
+                dataInfo.MakeDataFile();
                 dataInfo.getInfoFromFile();
 
                 /////////// FCFS
                 RunFCFS(ref dataInfo, dataFiles, 1);
-           
+                dataInfo.getInfoFromFile();
 
                 /////////// RR
                 RunRR(ref dataInfo, dataFiles, 1);
+                dataInfo.getInfoFromFile();
 
                 dataFiles--;
             }
@@ -46,9 +48,9 @@ namespace Sim
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             algo2.RunSimulation();
 
-            Run newRun = new Run("RR", dataFiles);
-            newRun.outputInfo(ref dataInfo);
-            runs.Add(newRun);
+            Run newRun2 = new Run("RR", dataFiles);
+            newRun2.outputInfo(ref dataInfo);
+            runs.Add(newRun2);
         }
 
     }
