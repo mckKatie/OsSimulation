@@ -28,6 +28,8 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
+                //RunRR(ref dataInfo, dataFiles, 1, 2);
+              
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
 
@@ -59,21 +61,17 @@ namespace Sim
         {
             FCFS algo1 = new FCFS(processors);
             algo1.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo1.RunSimulation();
-
-            Run newRun = new Run("FCFS", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun =  algo1.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 
-        static public void RunRR(ref DataFile dataInfo, int dataFiles, int processors)
+        static public void RunRR(ref DataFile dataInfo, int dataFiles, int processors, int quantum)
         {
-            RR algo2 = new RR(processors);
+            RR algo2 = new RR(processors, quantum);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo2.RunSimulation();
-
-            Run newRun = new Run("RR", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun = algo2.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -81,10 +79,8 @@ namespace Sim
         {
             SPN algo = new SPN(processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo.RunSimulation();
-
-            Run newRun = new Run("SPN", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -92,10 +88,8 @@ namespace Sim
         {
             STR algo = new STR(processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo.RunSimulation();
-
-            Run newRun = new Run("STR", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 

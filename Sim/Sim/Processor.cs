@@ -55,9 +55,9 @@ namespace Sim
         public int getCompletionTime() { return burstCompletionTime; }
         public bool BurstCompleteCheck(int currentTime)
         {
-            if (burstCompletionTime == currentTime)
+            if (burstCompletionTime == currentTime && state == Pstate.busy)
             {
-                state = Pstate.stop;
+                state = Pstate.swapping;
                 return true;
             }
             return false;

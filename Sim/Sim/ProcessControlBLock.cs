@@ -14,6 +14,7 @@ namespace Sim
     public class ProcessControlBlock
     {
         int PID;
+        List<int> burstMemory;
         state currentState;
         List<int> bursts;
         
@@ -22,9 +23,25 @@ namespace Sim
         {
             PID = _PID;
             currentState = state.ready;
-            bursts = _bursts;   //this is referentially assigned
+            burstMemory = _bursts;   //this is referentially assigned
+            bursts = new List<int>();
+            for (int i = 0; i < burstMemory.Count; i++)
+            {
+                bursts.Add(burstMemory[i]);
+            }
             log = new Metadata(submitTime);
         }
+        public void ResetPCB()
+        {
+            bursts = new List<int>();
+            for (int i = 0; i < burstMemory.Count; i++)
+            {
+                bursts.Add(burstMemory[i]);
+            }
+            currentState = state.ready;
+            log.ClearLog();
+        }
+
         public bool isRunning()
         {
             if (currentState == state.running)
@@ -100,6 +117,17 @@ namespace Sim
         }
 
 
+        public int getSubmitted() { return log.submitted; }
+        public int getPID() { return PID; }
+        public List<int> getBursts()
+        {
+            List<int> temp = new List<int>();
+            for(int i = 0; i < bursts.Count; i++)
+            {
+                temp.Add(bursts[i]);
+            }
+            return temp;
+        }
     }
 }
 
