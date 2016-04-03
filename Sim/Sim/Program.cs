@@ -28,10 +28,8 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
-<<<<<<< HEAD
                 RunRR(ref dataInfo, dataFiles, 1, 2);
               
-=======
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
 
@@ -54,7 +52,6 @@ namespace Sim
                 /////////// STR multiprocessor
                 //RunSTR(ref dataInfo, dataFiles, 4);
                 //dataInfo.getInfoFromFile();
->>>>>>> f7041d9915e529d4a358d95efb95a4193664da53
 
                 dataFiles--;
             }
@@ -82,10 +79,8 @@ namespace Sim
         {
             SPN algo = new SPN(processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo.RunSimulation();
-
-            Run newRun = new Run("SPN", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 
@@ -93,10 +88,8 @@ namespace Sim
         {
             STR algo = new STR(processors);
             algo.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
-            algo.RunSimulation();
-
-            Run newRun = new Run("STR", dataFiles);
-            newRun.outputInfo(ref dataInfo);
+            Run newRun = algo.RunSimulation();
+            newRun.outputInfo();
             runs.Add(newRun);
         }
 

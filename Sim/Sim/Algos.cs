@@ -92,13 +92,8 @@ namespace Sim
     public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-<<<<<<< HEAD
-        SPN(int numProcessors)
-            : base(numProcessors, Strategy.SPN)
-=======
         public SPN(int numProcessors)
-            : base(numProcessors)
->>>>>>> f7041d9915e529d4a358d95efb95a4193664da53
+            : base(numProcessors, Strategy.SPN)
         {
             readyList = new List<Tuple<int, int>>();
         }
@@ -130,12 +125,7 @@ namespace Sim
     public class STR : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
-
-<<<<<<< HEAD
-        STR(int numProcessors) : base(numProcessors, Strategy.STR)
-=======
-        public STR(int numProcessors) : base(numProcessors)
->>>>>>> f7041d9915e529d4a358d95efb95a4193664da53
+        public STR(int numProcessors) : base(numProcessors, Strategy.STR)
         {
             readyList = new List<Tuple<int, int>>();
         }
