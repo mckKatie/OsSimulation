@@ -168,7 +168,7 @@ namespace Sim
             int interruptMarker = completionTimes[processors.Count - 1];
             foreach (Processor p in processors)
             {
-                if (p.getCompletionTime() > interruptMarker)
+                if (p.getCompletionTime() > interruptMarker && p.getState() == Pstate.busy)
                 {
                     p.InterruptProcess();
                 }
