@@ -20,7 +20,8 @@ namespace Sim
                 string filePath = dataInfo.MakeDataFile(fileIndex);
                 dataInfo.getInfoFromFile(fileIndex);
 
-                string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+                //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
+                string mydocpath = Directory.GetCurrentDirectory() + @"\results.txt";
 
                 using (StreamWriter outputFile = File.AppendText(mydocpath))
                 {
@@ -36,13 +37,6 @@ namespace Sim
                 //dataInfo.getInfoFromFile();
 
                 /////////// RR
-<<<<<<< HEAD
-                //RunRR(ref dataInfo, filePath, 1, 10);
-              
-=======
-                RunRR(ref dataInfo, filePath, 1, 10);
-
->>>>>>> 3e9390bea60b631778e66bfca6c9a835cae47d43
                 //RunRR(ref dataInfo, dataFiles, 1);
                 //dataInfo.getInfoFromFile();
 
