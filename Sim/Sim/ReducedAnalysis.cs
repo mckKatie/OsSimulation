@@ -18,6 +18,7 @@ namespace Sim
             double simulationTime;
             double throughput;
             double responseTime;
+            int numRuns;
             public StrategyInfo(Strategy _strat, int _numProc, List<int> _q)
             {
                 strat = _strat;
@@ -28,6 +29,7 @@ namespace Sim
                 simulationTime = 0;
                 throughput = 0;
                 responseTime = 0;
+                numRuns = 0;
             }
             public void Reduced(List<Run> runs)
             {
@@ -44,6 +46,7 @@ namespace Sim
                 simulationTime /= runs.Count;
                 responseTime /= runs.Count;
                 throughput /= runs.Count;
+                numRuns = runs.Count;
             }
         }
         MultiMap<Run> runsGrouped;
@@ -64,7 +67,7 @@ namespace Sim
             {
                 StrategyInfo temp = new StrategyInfo(key.Item1, key.Item2, key.Item3);
                 temp.Reduced(runsGrouped[key]);
-
+                reducedData.Add(temp);
             }
         }
     }
