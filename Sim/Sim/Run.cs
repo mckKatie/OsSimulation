@@ -57,6 +57,7 @@ namespace Sim
             endAvg = avgs[3];
             contactSwitches = avgs[4];
             burstsPerProcess = avgs[5];
+            waitAvg = avgs[6];
         }
 
         public void outputInfo()
