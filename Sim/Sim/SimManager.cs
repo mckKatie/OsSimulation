@@ -17,7 +17,7 @@ namespace Sim
         Strategy strat;
         string inputFileName;
 
-        public SimManager(int numProcessors, Strategy _strat)
+        public SimManager(string filePath, int numProcessors, Strategy _strat)
         {
             processes = new Dictionary<int,ProcessControlBlock>();
             subTimes = new List<Tuple<int,int>>();
@@ -25,7 +25,7 @@ namespace Sim
             processors = new List<Processor>();
             clock = 0;
             strat = _strat;
-            inputFileName = "";
+            inputFileName = filePath;
             for(int i = 0; i < numProcessors; i++)
             {
                 processors.Add(new Processor(i));
@@ -93,7 +93,8 @@ namespace Sim
 
         private Run ComposeResults()   //use this function to make run instance
         {
-            Run temp = new Run(getStrategy(), inputFileName, processes);
+            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count);
+            AddAdditionalMetadata(temp);
             ResetPCBs();
             return temp;
         }
@@ -209,8 +210,9 @@ namespace Sim
         abstract public void ProcessReadyQueue(int PID);// pushes PID into ready queue, depends on strategy so will be overloaded in subclasses
         // this will need to set state of process
         abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
-        abstract public void MarkInterrupts(int currentTime);
+        abstract public void MarkInterrupts();
         abstract public bool ReadyQueueEmpty();
+        abstract public void AddAdditionalMetadata(Run run);
 
     }
  
