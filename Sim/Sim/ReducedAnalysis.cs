@@ -56,6 +56,10 @@ namespace Sim
             runsGrouped = new MultiMap<Run>();
             reducedData = new List<StrategyInfo>();
         }
+        public List<StrategyInfo> getReducedData()
+        {
+            return reducedData;
+        }
         public void ComputeReducedAverages(List<Run> runs)
         {
             foreach (Run r in runs)
