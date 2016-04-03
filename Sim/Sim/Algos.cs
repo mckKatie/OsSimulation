@@ -261,6 +261,7 @@ namespace Sim
     }
     public class MLFB : SimManager
     {
+        Dictionary<int, int> processTierMap;
         List<Queue<int>> queueList;
         List<int> quantum;
         List<int> processorQuantumEnd;
@@ -268,34 +269,52 @@ namespace Sim
         public MLFB(string filePath, int numProcessors, List<int> _quantums) : base(filePath, numProcessors, Strategy.MLFB)
         {
             quantum = _quantums;
+
+            queueList = new List<Queue<int>>();
             for (int i = 0; i < quantum.Count + 1; i++ )
-                queueList.Add(new Queue<int>);
+                queueList.Add(new Queue<int>());
+
             processorQuantumEnd = new List<int>();
             for (int i = 0; i < processors.Count; i++)
             {
                 processorQuantumEnd.Add(0);
             }
+            processTierMap = new Dictionary<int, int>();
+            foreach(KeyValuePair<int, ProcessControlBlock> kvp in processes)
+            {
+                processTierMap.Add(kvp.Key, 0);
+            }
         }
         override public Tuple<int, int> ProcessOpenProcessor(int id) //processor id
         {
-            int pid = readyQueue.First();
-            readyQueue.Dequeue();
-            ProcessControlBlock temp = getProcessByID(pid);
-            temp.ProcessorInitiate(clock);
-            int burstTime = temp.getNextBurst();
-            processorQuantumEnd[id] = (quantum + clock);
-            return new Tuple<int, int>(burstTime + clock, pid);
+            int tier = 0;
+            for (; tier < queueList.Count; tier++)
+            {
+                if (queueList[tier].Count != 0)
+                {
+                    int pid = queueList[tier].Dequeue();
+                    ProcessControlBlock temp = getProcessByID(pid);
+                    temp.ProcessorInitiate(clock);
+                    int burstTime = temp.getNextBurst();
+                    processorQuantumEnd[id] = (quantum[tier] + clock);
+                    return new Tuple<int, int>(burstTime + clock, pid);
+                }
+            }
+            return null;
         }
         override public void ProcessReadyQueue(int PID)
         {
-            readyQueue.Enqueue(PID);
+            queueList[processTierMap[PID]].Enqueue(PID);
         }
         public override void UpdateReadyQueue() { }
-        override public bool ReadyQueueEmpty()
+        override public bool ReadyQueueEmpty() //finished
         {
-            if (readyQueue.Count == 0)
-                return true;
-            return false;
+            foreach(Queue<int> q in queueList)
+            {
+                if(q.Count != 0)
+                    return false;
+            }
+            return true;
         }
         override public void MarkInterrupts()
         {

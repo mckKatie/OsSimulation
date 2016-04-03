@@ -12,7 +12,7 @@ namespace Sim
     {
         Strategy strat;
         int numProcessors;
-        int quantum;
+        List<int> quantums;
 
 
         string dataFile;
@@ -28,7 +28,11 @@ namespace Sim
         }
         public void setQuantum(int q)
         {
-            quantum = q;
+            quantums.Add(q);
+        }
+        public void setQuantums(List<int> q)
+        {
+            quantums = q;
         }
         public void computeAverages(Dictionary<int, ProcessControlBlock> procs)
         {
