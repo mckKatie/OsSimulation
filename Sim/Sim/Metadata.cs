@@ -10,6 +10,7 @@ namespace Sim
         {
             public int submitted;
             public int completed;
+            public int CPUBurstCount;
 
             public int response;
             public int execution;
@@ -27,6 +28,7 @@ namespace Sim
                 wait = 0;
                 io = 0;
                 timesSwapped = 0;
+                CPUBurstCount = 0;
 
                 response = -1;
 
@@ -58,6 +60,7 @@ namespace Sim
                 wait = 0;
                 io = 0;
                 timesSwapped = 0;
+                CPUBurstCount = 0;
                 response = -1;
                 burstMarker = submitted;
                 completed = 0;
