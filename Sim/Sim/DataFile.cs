@@ -69,26 +69,26 @@ namespace Sim
             using (StreamWriter data = new StreamWriter(mydocpath + @"\results.txt"))
             {
                 Random inputs = new Random();
-                int processes = inputs.Next(1, 10);
+                int processes = inputs.Next(1, 150);
                 for (int i = 0; i < processes; i++)
                 {
                     // PID is i, 10 random bursts
                     // random number for arrival time
                     data.Write(i + " ");
-                    int time = inputs.Next(1, 10);
+                    int time = inputs.Next(1, 25);
                     data.Write(time + " "); // arrival time
-                    int bursts = inputs.Next(1, 5);
+                    int bursts = inputs.Next(1, 97);
                     for (int j = 0; j < bursts; j++)
                     {
-                        time = inputs.Next(1, 10);
+                        time = inputs.Next(1, 150);
                         data.Write(time + " ");
                     }
                     data.Write("\n");
                 }
+                data.Close();
 
             }
         }
-
         /// <summary>
         /// Info is stored in PCB, it's constructor asks for all 
         /// the info.  Then all the PCB's are stored into a dictionary
@@ -125,15 +125,14 @@ namespace Sim
                 importantInfo.Add(PID, newProcess);
                 submitTimes.Add(new Tuple<int,int>(submitted, PID));
 
-                Console.Write("Pid: {0}, submitted: {1}, bursts: ", PID, submitted);
-                foreach (int b in bursts)
-                {
-                    Console.Write(b + " ");
-                }
-                Console.Write("\n");
+                //Console.Write("Pid: {0}, submitted: {1}, bursts: ", PID, submitted);
+                //foreach (int b in bursts)
+                //{
+                //    Console.Write(b + " ");
+                //}
+                //Console.Write("\n");
 
             }
         }
-
     }
 }

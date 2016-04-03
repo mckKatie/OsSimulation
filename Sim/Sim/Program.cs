@@ -24,9 +24,7 @@ namespace Sim
 
                 /////////// RR
                 RunRR(ref dataInfo, dataFiles, 1);
-              
 
-                
                 dataFiles--;
             }
         }

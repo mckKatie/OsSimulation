@@ -40,7 +40,7 @@ namespace Sim
         public override void MarkInterrupts(int currentTime) {}
     }
 
-    class RR : SimManager
+    public class RR : SimManager
     {
         Queue<int> readyQueue;
         List<int> processorQuantumEnd;
@@ -88,7 +88,7 @@ namespace Sim
         }
     }
 
-    class SPN : SimManager
+    public class SPN : SimManager
     {
         List<Tuple<int, int>> readyList; //burstTime, PID
         SPN(int numProcessors)
@@ -176,4 +176,6 @@ namespace Sim
 
         }
     }
+
+
 }
