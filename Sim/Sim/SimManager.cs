@@ -13,16 +13,18 @@ namespace Sim
         public Dictionary<int, ProcessControlBlock> processes;
         public List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
+        public List<int> quantum;
         public List<Processor> processors;
         Strategy strat;
         string inputFileName;
 
-        public SimManager(string filePath, int numProcessors, Strategy _strat)
+        public SimManager(string filePath, int numProcessors, Strategy _strat, List<int> _quantum)
         {
             processes = new Dictionary<int,ProcessControlBlock>();
             subTimes = new List<Tuple<int,int>>();
             IOList = new List<Tuple<int,int>>();
             processors = new List<Processor>();
+            quantum = _quantum;
             clock = 0;
             strat = _strat;
             inputFileName = filePath;
@@ -95,7 +97,7 @@ namespace Sim
 
         private Run ComposeResults()   //use this function to make run instance
         {
-            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count, clock);
+            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count, clock, quantum);
             AddAdditionalMetadata(temp);
             ResetPCBs();
             return temp;
@@ -208,14 +210,17 @@ namespace Sim
                 }
             }
         }
-
+        public void AddAdditionalMetadata(Run run)
+                {
+                    run.setQuantums(quantum);
+                }
         abstract public void ProcessReadyQueue(int PID);// pushes PID into ready queue, depends on strategy so will be overloaded in subclasses
         // this will need to set state of process
         abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
         abstract public void MarkInterrupts();
         abstract public bool ReadyQueueEmpty();
         abstract public void UpdateReadyQueue();
-        abstract public void AddAdditionalMetadata(Run run);
+        
         abstract public void AddTierMapping(int id);
     }
  

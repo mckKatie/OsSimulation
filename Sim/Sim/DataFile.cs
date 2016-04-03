@@ -105,23 +105,26 @@ namespace Sim
             }
         }
 
-        public void outputInfoToFile(ReducedAnalysis endInfo)
+        public void outputInfoToFile(List<StrategyInfo> endInfo)
         {
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string filePath = mydocpath + @"\results.txt";
 
             using (StreamWriter outputFile = File.AppendText(filePath))
             {
-                outputFile.WriteLine("For runs with balanced cpu and io bursts");
-                outputFile.WriteLine("For {0} on {1} processor(s):\n", Convert.ToString(endInfo.strat), endInfo.numProcessors);
-                outputFile.Write("\t Quantum(s): ");
-                foreach (int i in endInfo.quantums)
+                foreach (StrategyInfo si in endInfo)
                 {
-                    outputFile.Write(i + " ");
+                    outputFile.WriteLine("For runs with balanced cpu and io bursts");
+                    outputFile.WriteLine("For {0} on {1} processor(s):\n", Convert.ToString(si.strat), si.numProcessors);
+                    outputFile.Write("\t Quantum(s): ");
+                    foreach (int i in si.quantums)
+                    {
+                        outputFile.Write(i + " ");
+                    }
+                    outputFile.WriteLine("\n\t Turnaround Time: \t{0}\nWait Time: \t{1} \nSimulation Time: \t{2}\n" +
+                        "Throughput: \t{3}\nResponse Time: \t{4}\nNumber of Runs: \t{5}\n\n", si.turnaroundTime,
+                        si.waitTime, si.simulationTime, si.throughput, si.responseTime, si.numRuns);
                 }
-                outputFile.WriteLine("\n\t Turnaround Time: \t{0}\nWait Time: \t{1} \nSimulation Time: \t{2}\n" +
-                    "Throughput: \t{3}\nResponse Time: \t{4}\nNumber of Runs: \t{5}\n\n", endInfo.turnaroundTime,
-                    endInfo.waitTime, endInfo.simulationTime, endInfo.throughput, endInfo.responseTime, endInfo.numRuns);
             }
         }
     }
