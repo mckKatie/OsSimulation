@@ -63,8 +63,9 @@ namespace Sim
         public string MakeDataFile(int fileIndex)
         {
 
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string filePath = mydocpath + @"\input" + fileIndex + ".txt";
+            //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //string filePath = mydocpath + @"\input" + fileIndex + ".txt";
+            string filePath = @"\input" + fileIndex + ".txt";
             using (StreamWriter data = new StreamWriter(filePath))
             {
                 Random inputs = new Random();
