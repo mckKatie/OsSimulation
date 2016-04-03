@@ -95,6 +95,7 @@ namespace Sim
             Console.WriteLine("Check your document folder for results.txt and the corresponding datafile");
 
             ReducedAnalysis endAnalysis = new ReducedAnalysis();
+            endAnalysis.ComputeReducedAverages(runs);
             endAnalysis.completeAnalysis();
 
         }
