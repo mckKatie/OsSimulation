@@ -14,11 +14,10 @@ namespace Sim
     public class ProcessControlBlock
     {
         int PID;
-        List<int> burstMemory;
-        state currentState;
-        List<int> bursts;
-        
-        public Metadata log;
+        List<int> burstMemory; //deep copied list of burst values, persists between simulations
+        state currentState; //one of above emun values
+        List<int> bursts; //list of burst times yet to be completed
+        Metadata log; //stores metadata about this process
         public ProcessControlBlock(int submitTime, int _PID, List<int> _bursts)
         {
             PID = _PID;
@@ -31,6 +30,9 @@ namespace Sim
             }
             log = new Metadata(submitTime);
         }
+
+        //////////// Reset Called Between Simulation Runs
+        //////////// resets burst List and wipes Metadata
         public void ResetPCB()
         {
             bursts = new List<int>();
@@ -42,6 +44,9 @@ namespace Sim
             log.ClearLog();
         }
 
+        ///////////////////////////////////////////
+        //////////// PCB state Queries ////////////
+        ///////////////////////////////////////////
         public bool isRunning()
         {
             if (currentState == state.running)
@@ -66,6 +71,7 @@ namespace Sim
                 return true;
             return false;
         }
+
         public int getNextBurst() { return bursts[0]; }
         public void ProcessorInitiate(int currentTime)
         {
@@ -75,9 +81,11 @@ namespace Sim
                 log.setResponse(currentTime);
             }
             currentState = state.running;
-            log.CPUBurstCount++;
+            log.CPUBurst();
         }
-
+        ////////////////////////////////////////////////
+        //////////// State Change Functions ////////////
+        ////////////////////////////////////////////////
         public void CPUFinish(int currentTime)
         {
             log.UpdateLog(this, currentTime);
@@ -90,15 +98,13 @@ namespace Sim
             else
                 currentState = state.io;
         }
-
         public void CPUInterrupt(int currentTime)
         {
             int workDone = log.UpdateLog(this, currentTime);
             bursts[0] -= workDone;
             currentState = state.ready;
-            log.timesSwapped++;
+            log.Swap();
         }
-
         public void IOFinish(int currentTime)
         {
             log.UpdateLog(this, currentTime);
@@ -111,24 +117,16 @@ namespace Sim
             else
                 currentState = state.ready;
         }
-
-        private void Terminate(int currentTime)    //compute final values
+        private void Terminate(int currentTime)
         {
             log.setCompleted(currentTime);
         }
-
-
-        public int getSubmitted() { return log.submitted; }
+        ////////////////////////////////////
+        //////////// Basic Gets ////////////
+        ////////////////////////////////////
+        public Metadata getLog() { return log; }
+        public int getSubmitted() { return log.getSubmitted(); }
         public int getPID() { return PID; }
-        public List<int> getBursts()
-        {
-            List<int> temp = new List<int>();
-            for(int i = 0; i < bursts.Count; i++)
-            {
-                temp.Add(bursts[i]);
-            }
-            return temp;
-        }
     }
 }
 

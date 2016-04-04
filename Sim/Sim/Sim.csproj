@@ -52,7 +52,7 @@
     <Compile Include="ReducedAnalysis.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="SimManager.cs" />
-    <Compile Include="Temp.cs" />
+    <Compile Include="Analysis.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
