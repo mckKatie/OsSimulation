@@ -31,7 +31,7 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                average += System.Convert.ToDouble(logList[i].response);
+                average += System.Convert.ToDouble(logList[i].getResponse());
             }
             average /= logList.Count;
             return average;
@@ -47,7 +47,7 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                average += System.Convert.ToDouble(logList[i].completed);
+                average += System.Convert.ToDouble(logList[i].getCompleted());
             }
             average /= logList.Count;
             return average;
@@ -64,7 +64,7 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                double turn = System.Convert.ToDouble(turnaroundTime(logList[i].submitted, logList[i].completed));
+                double turn = System.Convert.ToDouble(turnaroundTime(logList[i].getSubmitted(), logList[i].getCompleted()));
                 average += turn;
             }
             average /= logList.Count;
@@ -81,7 +81,19 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                double turn = System.Convert.ToDouble(logList[i].response);
+                double turn = System.Convert.ToDouble(logList[i].getResponse());
+                average += turn;
+            }
+            average /= logList.Count;
+            return average;
+        }
+
+        public static double AverageWaitTime(List<Metadata> logList)
+        {
+            double average = 0;
+            for (int i = 0; i < logList.Count; i++)
+            {
+                double turn = System.Convert.ToDouble(logList[i].getWait());
                 average += turn;
             }
             average /= logList.Count;
@@ -98,7 +110,7 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                double turn = System.Convert.ToDouble(logList[i].timesSwapped);
+                double turn = System.Convert.ToDouble(logList[i].getTimesSwapped());
                 average += turn;
             }
             average /= logList.Count;
@@ -110,7 +122,7 @@ namespace Sim
             double average = 0;
             for (int i = 0; i < logList.Count; i++)
             {
-                double count = System.Convert.ToDouble(logList[i].CPUBurstCount);
+                double count = System.Convert.ToDouble(logList[i].getCPUBurstCount());
                 average += count;
             }
             average /= logList.Count;
@@ -130,7 +142,7 @@ namespace Sim
             List<Metadata> logList = new List<Metadata>();
             for (int i = 0; i < logInfo.Count; i++)
             {
-                logList.Add(temp[i].Value.log);
+                logList.Add(temp[i].Value.getLog());
             }
 
             List<double> averages = new List<double>();
@@ -146,7 +158,8 @@ namespace Sim
             averages.Add(contactSwitch);
             double burstCountPerProcess = AverageCPUAllocationsPerProcess(logList);
             averages.Add(burstCountPerProcess);
-
+            double waitAvg = AverageWaitTime(logList);
+            averages.Add(waitAvg);
             // write results to results.txt
             //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             //using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\results.txt"))

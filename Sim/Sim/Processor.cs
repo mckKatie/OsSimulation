@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-enum Pstate { busy, open, stop, swapping, interrupted}
-//might be able to replace all instances of stop with swapping
+enum Pstate { busy, open, swapping, interrupted}
 
 namespace Sim
 {
@@ -14,14 +13,42 @@ namespace Sim
         Pstate state;
         int processorID;
         int PID;
-        int burstCompletionTime; // either because burst is completed or quantum reached
+        int burstCompletionTime; //time at which burst will be completed
 
         public Processor(int id){
             state = Pstate.open;
             processorID = id;
         }
+
+        ///////////////////////////
+        ////// Functionality //////
+        ///////////////////////////
+        public bool BurstCompleteCheck(int currentTime)
+        {
+            if (burstCompletionTime == currentTime && state == Pstate.busy)
+            {
+                state = Pstate.swapping;
+                return true;
+            }
+            return false;
+        }
+        public void AssignProcess(Tuple<int, int> assignment) // assignment = <BurstCompletionTime, PID>
+        {
+            PID = assignment.Item2;
+            burstCompletionTime = assignment.Item1;
+            state = Pstate.busy;
+        }
+
+        //////////////////////////
+        /////// Basic Gets ///////
+        //////////////////////////
         public int getPID(){ return PID; }
         public int getProcID() { return processorID; }
+        public int getCompletionTime() { return burstCompletionTime; }
+        
+        /////////////////////////////////
+        ///////// State Queries /////////
+        /////////////////////////////////
         public bool isSwapping()
         {
             if (state == Pstate.swapping)
@@ -40,34 +67,16 @@ namespace Sim
                 return true;
             return false;
         }
-        public bool isStopped()
-        {
-            if (state == Pstate.stop)
-                return true;
-            return false;
-        }
         public bool isInterrupted()
         {
             if (state == Pstate.interrupted)
                 return true;
             return false;
         }
-        public int getCompletionTime() { return burstCompletionTime; }
-        public bool BurstCompleteCheck(int currentTime)
-        {
-            if (burstCompletionTime == currentTime && state == Pstate.busy)
-            {
-                state = Pstate.swapping;
-                return true;
-            }
-            return false;
-        }
-        public void AssignProcess(Tuple<int, int> BurstCompletionTime_PID) // burst completion time needs to be set to sooner of burst time and quantum in os strategy
-        {
-            PID = BurstCompletionTime_PID.Item2;
-            burstCompletionTime = BurstCompletionTime_PID.Item1;
-            state = Pstate.busy;
-        }
+
+        //////////////////////////////////////////////
+        ///////// State Transition Functions /////////
+        //////////////////////////////////////////////
         public void SwapContexts()
         {
             state = Pstate.swapping;
