@@ -33,13 +33,53 @@ namespace Sim
                 processors.Add(new Processor(i));
             }
         }
+
+        public Run RunSimulation()
+        {
+            while (true)
+            {
+
+                clock++;                        //increment clock
+                FinishSwaps();                  //free processors previously doing context swaps
+                CheckForProcesses(IOList);      //finish io
+
+                CheckProcessorStatus();         //check for completed processes, interrupt if necessary
+                MarkInterrupts();               //mark processors to interrupt based on strategy
+                HandleInterrupts();             //handle interrupted processes
+                CheckForProcesses(subTimes);    //submit new processes
+                UpdateReadyQueue();             // calls strategy specific sort function if required
+                AssignFreeProcessors();         //assign to free processors
+                if (subTimes.Count != 0)
+                {
+                    continue;
+                }
+                else if (IOList.Count != 0)
+                {
+                    continue;
+                }
+                else if (!ReadyQueueEmpty())
+                {
+                    continue;
+                }
+                else if (!ProcessorsAllEmpty())
+                {
+                    continue;
+                }
+                break;
+            }
+            return ComposeResults();
+        }
+
+        //////////////////////////////////////////
+        ////// Child Class Access Functions //////
+        //////////////////////////////////////////
         public int getClock() { return clock; }
         public Processor getProcessorByID(int id) { return processors[id]; }
         public int getNumProcessors() { return processors.Count; }
         public int getQuantum(int tier) { return quantum[tier]; }
         public int getNumQuantums() { return quantum.Count; }
 
-        public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
+        public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // seeds dictionary 
         {
             processes = procs;
             foreach (Tuple<int, int> p in subs)
@@ -50,61 +90,20 @@ namespace Sim
             subTimes.Sort();
         }
 
-        public Run RunSimulation()
+        private Run ComposeResults()   //use this function to make run instance and reset dictionary before concluding run
         {
-            while (true)
-            {
-                //increment clock
-                clock++;
-                FinishSwaps();
-                //finish io
-                CheckForProcesses(IOList);
-                //check for completed processes, interrupt if necessary
-                CheckProcessorStatus();
-                MarkInterrupts();
-                //handle interrupted processes
-                HandleInterrupts();
-                //submit new processes
-                CheckForProcesses(subTimes);
-                //assign to free processors
-                UpdateReadyQueue();// calls strategy specific sort function if required
-                AssignFreeProcessors();
-                if(subTimes.Count != 0)
-                {
-                    continue;
-                }
-                else if(IOList.Count != 0)
-                {
-                    continue;
-                }
-                else if(!ReadyQueueEmpty())
-                {
-                    continue;
-                }
-                else if(!ProcessorsAllEmpty())
-                {
-                    continue;
-                }
-                break;
-            }
-            return ComposeResults();
-        }
-
-        private Run ComposeResults()   //use this function to make run instance
-        {
-            Run temp = new Run(getStrategy(), inputFileName, processes, processors.Count, clock, quantum);
+            Run temp = new Run(strat, inputFileName, processes, processors.Count, clock, quantum);
             AddAdditionalMetadata(temp);
             ResetPCBs();
             return temp;
         }
-        private void ResetPCBs()
+        private void ResetPCBs() // reset the reference passed dictionary between simulations
         {
             foreach (KeyValuePair<int, ProcessControlBlock> kvp in processes)
             {
                 kvp.Value.ResetPCB();
             }
         }
-        private Strategy getStrategy() { return strat; }
         public ProcessControlBlock getProcessByID(int pid)
         {
             ProcessControlBlock temp;
@@ -187,13 +186,7 @@ namespace Sim
             return true;
         }
 
-        public void InterruptProcessor(Processor p) // changes processor state and has pcb execute interruption handling
-        {
-            int pid = p.getPID();
-            ProcessControlBlock temp = getProcessByID(pid);
-            temp.CPUInterrupt(clock);
-            ProcessReadyQueue(pid); 
-        }
+        
         public void HandleInterrupts()
         {
             foreach (Processor p in processors)
@@ -205,10 +198,17 @@ namespace Sim
                 }
             }
         }
+        public void InterruptProcessor(Processor p) // has pcb execute interruption handling
+        {
+            int pid = p.getPID();
+            ProcessControlBlock temp = getProcessByID(pid);
+            temp.CPUInterrupt(clock);
+            ProcessReadyQueue(pid); 
+        }
         public void AddAdditionalMetadata(Run run)
-                {
+        {
                     run.setQuantums(quantum);
-                }
+        }
 
         /////////////////////////////////////////////////////////
         ////// Abstract Functions Defined By Each Strategy //////
