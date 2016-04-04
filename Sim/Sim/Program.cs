@@ -18,10 +18,10 @@ namespace Sim
             {
                 DataFile dataInfo = new DataFile();
                 // order of numbers is cpuburst, ioburst, numBursts, arrivalTime, and number of proceducers
-                Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 50);
-                Tuple<int, int> IOBurst = new Tuple<int, int>(10, 50);
+                Tuple<int, int> CPUBurst = new Tuple<int, int>(40, 80);
+                Tuple<int, int> IOBurst = new Tuple<int, int>(40, 80);
 
-                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 150, 50, 150);
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 75, 50, 150);
                 dataInfo.getInfoFromFile(fileIndex);
 
                 //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
@@ -43,17 +43,17 @@ namespace Sim
                 List<int> rr2 = new List<int>() { 20 };
                 List<int> rr3 = new List<int>() { 40 };
                 /////////// RR w/ differing quantums (1 processor)
-                RunRR(ref dataInfo, filePath, 1, rr1);
-                RunRR(ref dataInfo, filePath, 1, rr2);
-                RunRR(ref dataInfo, filePath, 1, rr3);
+                RunRR(ref dataInfo, filePath, 1, rr1, Strategy.RR1);
+                RunRR(ref dataInfo, filePath, 1, rr2, Strategy.RR2);
+                RunRR(ref dataInfo, filePath, 1, rr3, Strategy.RR3);
                 /////////////// RR w/ differing quantums (2 processor)
-                RunRR(ref dataInfo, filePath, 2, rr1);
-                RunRR(ref dataInfo, filePath, 2, rr2);
-                RunRR(ref dataInfo, filePath, 2, rr3);
+                RunRR(ref dataInfo, filePath, 2, rr1, Strategy.RR1);
+                RunRR(ref dataInfo, filePath, 2, rr2, Strategy.RR2);
+                RunRR(ref dataInfo, filePath, 2, rr3, Strategy.RR3);
                 /////////////// RR w/ differing quantums (4 processor)
-                RunRR(ref dataInfo, filePath, 4, rr1);
-                RunRR(ref dataInfo, filePath, 4, rr2);
-                RunRR(ref dataInfo, filePath, 4, rr3);
+                RunRR(ref dataInfo, filePath, 4, rr1, Strategy.RR1);
+                RunRR(ref dataInfo, filePath, 4, rr2, Strategy.RR2);
+                RunRR(ref dataInfo, filePath, 4, rr3, Strategy.RR3);
 
                 ///////////// SPN 
                 RunSPN(ref dataInfo, filePath, 1, empty);
@@ -113,9 +113,9 @@ namespace Sim
             runs.Add(newRun);
         }
 
-        static public void RunRR(ref DataFile dataInfo, string filePath, int processors, List<int> quantum)
+        static public void RunRR(ref DataFile dataInfo, string filePath, int processors, List<int> quantum, Strategy selectedStrat)
         {
-            RR algo2 = new RR(filePath, processors, quantum);
+            RR algo2 = new RR(filePath, processors, quantum, selectedStrat);
             algo2.getInfo(dataInfo.getDictionary(), dataInfo.getSubTimes());
             Run newRun = algo2.RunSimulation();
             //newRun.outputInfo();
