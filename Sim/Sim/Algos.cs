@@ -26,9 +26,9 @@ namespace Sim
             int pid = readyQueue.First();
             readyQueue.Dequeue();
             ProcessControlBlock temp = getProcessByID(pid);
-            temp.ProcessorInitiate(clock);
+            temp.ProcessorInitiate(base.getClock());
             int burstTime = temp.getNextBurst();
-            return new Tuple<int, int>(burstTime + clock, pid);
+            return new Tuple<int, int>(burstTime + base.getClock(), pid);
         }
 
         override public void ProcessReadyQueue(int PID)
@@ -57,7 +57,7 @@ namespace Sim
         {
             readyQueue = new Queue<int>();
             processorQuantumEnd = new List<int>();
-            for(int i = 0; i < processors.Count; i++ )
+            for(int i = 0; i < base.getNumProcessors(); i++ )
             {
                 processorQuantumEnd.Add(0);
             }
@@ -71,10 +71,10 @@ namespace Sim
             int pid = readyQueue.First();
             readyQueue.Dequeue();
             ProcessControlBlock temp = getProcessByID(pid);
-            temp.ProcessorInitiate(clock);
+            temp.ProcessorInitiate(base.getClock());
             int burstTime = temp.getNextBurst();
-            processorQuantumEnd[id] = (quantum[0] + clock);
-            return new Tuple<int, int>(burstTime + clock, pid);
+            processorQuantumEnd[id] = (base.getQuantum(0) + base.getClock());
+            return new Tuple<int, int>(burstTime + base.getClock(), pid);
         }
         override public void ProcessReadyQueue(int PID)
         {
@@ -89,11 +89,11 @@ namespace Sim
         override public void MarkInterrupts()
         {
             int numWaiting = readyQueue.Count; // used to only interrupt as many processes as there are waiting in queue
-            for(int i = 0; i < processors.Count; i++)
+            for(int i = 0; i < base.getNumProcessors(); i++)
             {
-                if(processorQuantumEnd[i] == clock && processors[i].isBusy() && numWaiting > 0)
+                if (processorQuantumEnd[i] == base.getClock() && base.getProcessorByID(i).isBusy() && numWaiting > 0)
                 {
-                    processors[i].InterruptProcess();
+                    base.getProcessorByID(i).InterruptProcess();
                     numWaiting--;
                 }
             }
@@ -121,8 +121,8 @@ namespace Sim
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(processData.Item2);
-            temp.ProcessorInitiate(clock);
-            return new Tuple<int,int>(processData.Item1 + clock, processData.Item2);
+            temp.ProcessorInitiate(base.getClock());
+            return new Tuple<int, int>(processData.Item1 + base.getClock(), processData.Item2);
         }
 
         override public void ProcessReadyQueue(int PID)
@@ -164,8 +164,8 @@ namespace Sim
             Tuple<int, int> processData = readyList.First();
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(processData.Item2);
-            temp.ProcessorInitiate(clock);
-            return new Tuple<int, int>(processData.Item1 + clock, processData.Item2);
+            temp.ProcessorInitiate(base.getClock());
+            return new Tuple<int, int>(processData.Item1 + base.getClock(), processData.Item2);
         }
         override public void ProcessReadyQueue(int PID)
         {
@@ -186,26 +186,26 @@ namespace Sim
         override public void MarkInterrupts()
         {
             List<int> completionTimes = new List<int>();
-            foreach (Processor p in processors)
+            for(int i = 0; i < base.getNumProcessors(); i++)
             {
-                if (p.isBusy())
+                if (base.getProcessorByID(i).isBusy())
                 {
-                    completionTimes.Add(p.getCompletionTime());
+                    completionTimes.Add(base.getProcessorByID(i).getCompletionTime());
                 }
             }
-            for(int i = 0; i < processors.Count && readyList.Count > i; i++)
+            for(int i = 0; i < base.getNumProcessors() && readyList.Count > i; i++)
             {
-                completionTimes.Add(readyList[i].Item1 + clock);
+                completionTimes.Add(readyList[i].Item1 + base.getClock());
             }
             completionTimes.Sort();
-            if (completionTimes.Count > processors.Count)
+            if (completionTimes.Count > base.getNumProcessors())
             {
-                int interruptMarker = completionTimes[processors.Count - 1];
-                foreach (Processor p in processors)
+                int interruptMarker = completionTimes[base.getNumProcessors() - 1];
+                for (int i = 0; i < base.getNumProcessors(); i++)
                 {
-                    if (p.getCompletionTime() > interruptMarker && p.isBusy())
+                    if (base.getProcessorByID(i).getCompletionTime() > interruptMarker && base.getProcessorByID(i).isBusy())
                     {
-                        p.InterruptProcess();
+                        base.getProcessorByID(i).InterruptProcess();
                     }
                 }
             }
@@ -259,8 +259,8 @@ namespace Sim
             int burstTime = readyList[0].getBurstTime();
             readyList.RemoveAt(0);
             ProcessControlBlock temp = getProcessByID(pid);
-            temp.ProcessorInitiate(clock);
-            return new Tuple<int, int>(burstTime + clock, pid);
+            temp.ProcessorInitiate(base.getClock());
+            return new Tuple<int, int>(burstTime + base.getClock(), pid);
         }
         override public bool ReadyQueueEmpty()
         {
@@ -272,13 +272,13 @@ namespace Sim
         {
             ProcessControlBlock temp = getProcessByID(PID);
             int burstTime = temp.getNextBurst();
-            readyList.Add(new ReadyQueueEntry(PID, burstTime, clock));
+            readyList.Add(new ReadyQueueEntry(PID, burstTime, base.getClock()));
         }
         override public void UpdateReadyQueue()
         {
             foreach(ReadyQueueEntry rqe in readyList) // recompute value based off new time
             {
-                rqe.ComputeRatio(clock);
+                rqe.ComputeRatio(base.getClock());
             }
             readyList = readyList.OrderByDescending(v => v.getValue()).ToList(); // sort
         }
@@ -302,7 +302,7 @@ namespace Sim
                 queueList.Add(new Queue<int>());
 
             processorQuantumEnd = new List<int>();
-            for (int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < base.getNumProcessors(); i++)
             {
                 processorQuantumEnd.Add(0);
             }
@@ -331,15 +331,15 @@ namespace Sim
                 {
                     int pid = queueList[tier].Dequeue();
                     ProcessControlBlock temp = getProcessByID(pid);
-                    temp.ProcessorInitiate(clock);
+                    temp.ProcessorInitiate(base.getClock());
                     int burstTime = temp.getNextBurst();
                     int quantumDuration;
-                    if (tier == quantum.Count)
+                    if (tier == base.getNumQuantums())
                         quantumDuration = -1;
                     else
-                        quantumDuration = quantum[tier];
-                    processorQuantumEnd[id] = (quantumDuration + clock);
-                    return new Tuple<int, int>(burstTime + clock, pid);
+                        quantumDuration = base.getQuantum(tier);
+                    processorQuantumEnd[id] = (quantumDuration + base.getClock());
+                    return new Tuple<int, int>(burstTime + base.getClock(), pid);
                 }
             }
             return null; // it should get here since there is a queue empty check called in base class before this function is ever executed, return null to allow compile
@@ -361,12 +361,12 @@ namespace Sim
         override public void MarkInterrupts()
         {
             int numWaiting = getQueueVolume();
-            for (int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < base.getNumProcessors(); i++)
             {
-                if (processorQuantumEnd[i] == clock && processors[i].isBusy() && numWaiting > 0)
+                if (processorQuantumEnd[i] == base.getClock() && base.getProcessorByID(i).isBusy() && numWaiting > 0)
                 {
-                    processTierMap[processors[i].getPID()] = processTierMap[processors[i].getPID()] + 1;
-                    processors[i].InterruptProcess();
+                    processTierMap[base.getProcessorByID(i).getPID()] = processTierMap[base.getProcessorByID(i).getPID()] + 1;
+                    base.getProcessorByID(i).InterruptProcess();
                     numWaiting--;
                 }
             }

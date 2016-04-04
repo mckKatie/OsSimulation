@@ -9,12 +9,12 @@ namespace Sim
     abstract public class SimManager
     {
 
-        public int clock;
-        public Dictionary<int, ProcessControlBlock> processes;
-        public List<Tuple<int, int>> subTimes;
+        int clock;
+        Dictionary<int, ProcessControlBlock> processes;
+        List<Tuple<int, int>> subTimes;
         List<Tuple<int, int>> IOList; //<outTime, PID>
-        public List<int> quantum;
-        public List<Processor> processors;
+        List<int> quantum;
+        List<Processor> processors;
         Strategy strat;
         string inputFileName;
 
@@ -33,8 +33,12 @@ namespace Sim
                 processors.Add(new Processor(i));
             }
         }
+        public int getClock() { return clock; }
+        public Processor getProcessorByID(int id) { return processors[id]; }
+        public int getNumProcessors() { return processors.Count; }
+        public int getQuantum(int tier) { return quantum[tier]; }
+        public int getNumQuantums() { return quantum.Count; }
 
-        
         public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
         {
             processes = procs;
@@ -205,14 +209,16 @@ namespace Sim
                 {
                     run.setQuantums(quantum);
                 }
-        abstract public void ProcessReadyQueue(int PID);// pushes PID into ready queue, depends on strategy so will be overloaded in subclasses
-        // this will need to set state of process
-        abstract public Tuple<int, int> ProcessOpenProcessor(int id);//returns PID of process to get processor time// takes in processor id
-        abstract public void MarkInterrupts();
-        abstract public bool ReadyQueueEmpty();
-        abstract public void UpdateReadyQueue();
-        
-        abstract public void AddTierMapping(int id);
+
+        /////////////////////////////////////////////////////////
+        ////// Abstract Functions Defined By Each Strategy //////
+        /////////////////////////////////////////////////////////
+        abstract public void ProcessReadyQueue(int PID); // pushes PID into ready queue
+        abstract public Tuple<int, int> ProcessOpenProcessor(int id); //returns assignment = <burstCompletionTime, pid>// takes in processor id
+        abstract public void MarkInterrupts(); // mark processors as interrupted
+        abstract public bool ReadyQueueEmpty(); // check if ready queue is empty
+        abstract public void UpdateReadyQueue(); // sort ready queue if necessary
+        abstract public void AddTierMapping(int id); // assign initial tier assignment of each process (MLFB)
     }
  
 }
