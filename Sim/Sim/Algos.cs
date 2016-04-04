@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum Strategy { FCFS, RR, SPN, STR, HRRN, MLFB1, MLFB2, MLFB3 }
+public enum Strategy { FCFS, RR1, RR2, RR3, SPN, STR, HRRN, MLFB1, MLFB2, MLFB3 }
 
 namespace Sim
 {
@@ -49,7 +49,7 @@ namespace Sim
     {
         Queue<int> readyQueue;
         List<int> processorQuantumEnd;
-        public RR(string filePath, int numProcessors, List<int> quantum) : base(filePath, numProcessors, Strategy.RR, quantum)
+        public RR(string filePath, int numProcessors, List<int> quantum, Strategy selectedStrat) : base(filePath, numProcessors, selectedStrat, quantum)
         {
             readyQueue = new Queue<int>();
             processorQuantumEnd = new List<int>();
