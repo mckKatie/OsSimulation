@@ -12,7 +12,7 @@ namespace Sim
         public int clock;
         public Dictionary<int, ProcessControlBlock> processes;
         public List<Tuple<int, int>> subTimes;
-        List<Tuple<int, int>> IOList; //dont know what to call this <outTime, PID>
+        List<Tuple<int, int>> IOList; //<outTime, PID>
         public List<int> quantum;
         public List<Processor> processors;
         Strategy strat;
@@ -32,18 +32,9 @@ namespace Sim
             {
                 processors.Add(new Processor(i));
             }
-            // Feel free to add functions here to seed data structures
-
         }
 
-        //public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
-        //{
-        //    foreach (KeyValuePair<int, ProcessControlBlock> kvp in procs)
-        //        processes.Add(kvp.Key, new ProcessControlBlock(kvp.Value.getSubmitted(), kvp.Value.getPID(), kvp.Value.getBursts()));
-        //    foreach (Tuple<int, int> s in subs)
-        //        subTimes.Add(new Tuple<int, int>(s.Item1, s.Item2));
-        //    subTimes.Sort();
-        //}
+        
         public void getInfo(Dictionary<int, ProcessControlBlock> procs, List<Tuple<int, int>> subs) // need to deep copy data if running in parallel
         {
             processes = procs;
@@ -122,12 +113,12 @@ namespace Sim
             {
                 if(p.BurstCompleteCheck(clock)) // this will toggle processor status to stop if Burst Cmpleted
                 {
+                    p.SwapContexts();
                     int id = p.getPID();
                     ProcessControlBlock temp = getProcessByID(id);
                     temp.CPUFinish(clock);
                     if(temp.isIO())
                         StartIO(id);
-                    p.SwapContexts();
                 }
             }
         }

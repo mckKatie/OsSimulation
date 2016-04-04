@@ -18,10 +18,10 @@ namespace Sim
             {
                 DataFile dataInfo = new DataFile();
                 // order of numbers is cpuburst, ioburst, numBursts, arrivalTime, and number of proceducers
-                Tuple<int, int> CPUBurst = new Tuple<int, int>(40, 80);
-                Tuple<int, int> IOBurst = new Tuple<int, int>(40, 80);
+                Tuple<int, int> CPUBurst = new Tuple<int, int>(10, 25);
+                Tuple<int, int> IOBurst = new Tuple<int, int>(10, 25);
 
-                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 75, 50, 150);
+                string filePath = dataInfo.MakeDataFile(fileIndex, CPUBurst, IOBurst, 20, 200, 100);
                 dataInfo.getInfoFromFile(fileIndex);
 
                 //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\results.txt";
@@ -33,72 +33,71 @@ namespace Sim
                 List<int> empty = new List<int>();
                 #region deploy algorithms
                 /////////// FCFS
-                RunFCFS(ref dataInfo, filePath, 1, empty);
+                //RunFCFS(ref dataInfo, filePath, 1, empty);
                 //////////// FCFS 2 processors
-                RunFCFS(ref dataInfo, filePath, 2, empty);
+                //RunFCFS(ref dataInfo, filePath, 2, empty);
                 //////////// FCFS 4 processors
-                RunFCFS(ref dataInfo, filePath, 4, empty);
+                RunFCFS(ref dataInfo, filePath, 16, empty);
 
                 List<int> rr1 = new List<int>(){ 5 };
                 List<int> rr2 = new List<int>() { 20 };
-                List<int> rr3 = new List<int>() { 40 };
+                List<int> rr3 = new List<int>() { 15 };
                 /////////// RR w/ differing quantums (1 processor)
-                RunRR(ref dataInfo, filePath, 1, rr1, Strategy.RR1);
-                RunRR(ref dataInfo, filePath, 1, rr2, Strategy.RR2);
-                RunRR(ref dataInfo, filePath, 1, rr3, Strategy.RR3);
+                //RunRR(ref dataInfo, filePath, 1, rr1, Strategy.RR1);
+                //RunRR(ref dataInfo, filePath, 1, rr2, Strategy.RR2);
+                //RunRR(ref dataInfo, filePath, 1, rr3, Strategy.RR3);
                 /////////////// RR w/ differing quantums (2 processor)
-                RunRR(ref dataInfo, filePath, 2, rr1, Strategy.RR1);
-                RunRR(ref dataInfo, filePath, 2, rr2, Strategy.RR2);
-                RunRR(ref dataInfo, filePath, 2, rr3, Strategy.RR3);
+                //RunRR(ref dataInfo, filePath, 2, rr1, Strategy.RR1);
+                //RunRR(ref dataInfo, filePath, 2, rr2, Strategy.RR2);
+                //RunRR(ref dataInfo, filePath, 2, rr3, Strategy.RR3);
                 /////////////// RR w/ differing quantums (4 processor)
-                RunRR(ref dataInfo, filePath, 4, rr1, Strategy.RR1);
-                RunRR(ref dataInfo, filePath, 4, rr2, Strategy.RR2);
-                RunRR(ref dataInfo, filePath, 4, rr3, Strategy.RR3);
+                //RunRR(ref dataInfo, filePath, 4, rr1, Strategy.RR1);
+                //RunRR(ref dataInfo, filePath, 4, rr2, Strategy.RR2);
+                RunRR(ref dataInfo, filePath, 16, rr3, Strategy.RR3);
 
                 ///////////// SPN 
-                RunSPN(ref dataInfo, filePath, 1, empty);
+                //RunSPN(ref dataInfo, filePath, 1, empty);
                 ///////////// SPN 2 processors
-                RunSPN(ref dataInfo, filePath, 2, empty);
+                ///RunSPN(ref dataInfo, filePath, 2, empty);
                 ///////////// SPN 4 processors
-                RunSPN(ref dataInfo, filePath, 4, empty);
+                RunSPN(ref dataInfo, filePath, 16, empty);
 
                 ///////////// STR 
-                RunSTR(ref dataInfo, filePath, 1, empty);
+                //RunSTR(ref dataInfo, filePath, 1, empty);
                 ///////////// STR 2 processors
-                RunSTR(ref dataInfo, filePath, 2, empty);
+                //RunSTR(ref dataInfo, filePath, 2, empty);
                 ///////////// STR 4 processors
-                RunSTR(ref dataInfo, filePath, 4, empty);
+                RunSTR(ref dataInfo, filePath, 16, empty);
 
                 ///////////// HRRN
                 //RunHRRN(ref dataInfo, filePath, 1, empty);
                 ///////////// HRRN 2 processors
-                RunHRRN(ref dataInfo, filePath, 2, empty);
+                //RunHRRN(ref dataInfo, filePath, 2, empty);
                 ///////////// HRRN 4 processors
-                RunHRRN(ref dataInfo, filePath, 4, empty);
+                RunHRRN(ref dataInfo, filePath, 16, empty);
 
                 List<int> qTimes = new List<int>() { 5, 10, 50 };
                 List<int> qTimes2 = new List<int>() { 10, 40, 80 };
                 List<int> qTimes3 = new List<int>() { 1,2,4,8,16,32,64 };
                 ///////////// MLFB
-                RunMLFB(ref dataInfo, filePath, 1, qTimes, Strategy.MLFB1);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes2, Strategy.MLFB2);
-                RunMLFB(ref dataInfo, filePath, 1, qTimes3, Strategy.MLFB3);
+                //RunMLFB(ref dataInfo, filePath, 1, qTimes, Strategy.MLFB1);
+                //RunMLFB(ref dataInfo, filePath, 1, qTimes2, Strategy.MLFB2);
+                //RunMLFB(ref dataInfo, filePath, 1, qTimes3, Strategy.MLFB3);
                 ///////////// MLFB 2 processors
-                RunMLFB(ref dataInfo, filePath, 2, qTimes,  Strategy.MLFB1);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes2, Strategy.MLFB2);
-                RunMLFB(ref dataInfo, filePath, 2, qTimes3, Strategy.MLFB3);
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes,  Strategy.MLFB1);
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes2, Strategy.MLFB2);
+                //RunMLFB(ref dataInfo, filePath, 2, qTimes3, Strategy.MLFB3);
                 ///////////// MLFB 4 processors
-                RunMLFB(ref dataInfo, filePath, 4, qTimes,  Strategy.MLFB1);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes2, Strategy.MLFB2);
-                RunMLFB(ref dataInfo, filePath, 4, qTimes3, Strategy.MLFB3);
+                RunMLFB(ref dataInfo, filePath, 16, qTimes,  Strategy.MLFB1);
+                RunMLFB(ref dataInfo, filePath, 16, qTimes2, Strategy.MLFB2);
+                RunMLFB(ref dataInfo, filePath, 16, qTimes3, Strategy.MLFB3);
                 #endregion
 
                 fileIndex--;
             }
             Console.WriteLine("Check your document folder for results.txt and the corresponding datafile");
 
-            ReducedAnalysis endAnalysis = new ReducedAnalysis();
-            endAnalysis.ComputeReducedAverages(runs);
+            ReducedAnalysis endAnalysis = new ReducedAnalysis(runs);
             DataFile stuff = new DataFile();
             stuff.outputInfoToFile(endAnalysis.getReducedData());
 

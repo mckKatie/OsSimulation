@@ -9,18 +9,16 @@ namespace Sim
     public class ReducedAnalysis
     {
         
-        MultiMap<Run> runsGrouped;
-        List<StrategyInfo> reducedData;
-        public ReducedAnalysis()
+        MultiMap runsGrouped; //used to Reduce data
+        List<StrategyInfo> reducedData; //List of Reduced data
+        public ReducedAnalysis(List<Run> runsList)
         {
-            runsGrouped = new MultiMap<Run>();
+            runsGrouped = new MultiMap();
             reducedData = new List<StrategyInfo>();
+            ComputeReducedAverages(runsList);
         }
-        public List<StrategyInfo> getReducedData()
-        {
-            return reducedData;
-        }
-        public void ComputeReducedAverages(List<Run> runs)
+
+        private void ComputeReducedAverages(List<Run> runs)
         {
             foreach (Run r in runs)
             {
@@ -30,22 +28,28 @@ namespace Sim
             foreach(Tuple<Strategy, int> key in runsGrouped.Keys)
             {
                 StrategyInfo temp = new StrategyInfo(key.Item1, key.Item2, runsGrouped[key][0].getQuantum());
-                temp.Reduced(runsGrouped[key]);
+                temp.Reduce(runsGrouped[key]);
                 reducedData.Add(temp);
             }
         }
+        public List<StrategyInfo> getReducedData()
+        {
+            return reducedData;
+        }
     }
+  
     public struct StrategyInfo
     {
-        public Strategy strat;
-        public int numProcessors;
-        public List<int> quantums;
-        public double turnaroundTime;
-        public double waitTime;
-        public double simulationTime;
-        public double throughput;
-        public double responseTime;
-        public int numRuns;
+        Strategy strat;
+        int numProcessors;
+        List<int> quantums;
+        double turnaroundTime;
+        double waitTime;
+        double simulationTime;
+        double throughput;
+        double responseTime;
+        int numRuns;
+        
         public StrategyInfo(Strategy _strat, int _numProc, List<int>_q)
         {
             quantums = _q;
@@ -58,7 +62,7 @@ namespace Sim
             responseTime = 0;
             numRuns = 0;
         }
-        public void Reduced(List<Run> runs)
+        public void Reduce(List<Run> runs)
         {
             foreach (Run r in runs)
             {
@@ -75,5 +79,18 @@ namespace Sim
             throughput /= runs.Count;
             numRuns = runs.Count;
         }
+
+        ///////////////////////////
+        ////// Get Functions //////
+        ///////////////////////////
+        public string getStrategy(){return strat.ToString();}
+        public int getNumProcessors() {return numProcessors;}
+        public List<int> getQuantums() { return quantums; }
+        public double getTurnaroundTime() { return turnaroundTime; }
+        public double getWaitTime() { return waitTime; }
+        public double getSimulationTime() { return simulationTime; }
+        public double getThroughput() { return throughput; }
+        public double getResponseTime() { return responseTime; }
+        public int getNumRuns() { return numRuns; }
     }
 }

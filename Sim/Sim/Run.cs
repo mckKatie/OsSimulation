@@ -16,9 +16,8 @@ namespace Sim
 
 
         string dataFile;
-        double responseAvg = 0, turnAroundAvg = 0, startAvg = 0;
-        double endAvg = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;
-        double throughput = 0, waitAvg = 0;
+        double responseAvg = 0, turnAroundAvg = 0, startAvg = 0, waitAvg = 0, endAvg = 0;
+        double throughput = 0, contactSwitches = 0, burstsPerProcess = 0, endTime = 0;
         public Run(Strategy _strat, string _dataFile, Dictionary<int, ProcessControlBlock> procs, int _numProcessors, int _endTime, List<int> _quantums)
         {
             quantums = _quantums;
@@ -29,30 +28,11 @@ namespace Sim
             throughput = endTime / (double)procs.Count;
             computeAverages(procs);
         }
-        public void setQuantum(int q)
-        {
-            quantums.Add(q);
-        }
-        public void setQuantums(List<int> q)
-        {
-            quantums = q;
-        }
-        public List<int> getQuantum(){return quantums;}
-        public double getTurnaround() { return turnAroundAvg; }
-        public double getWait() { return waitAvg; }
-        public double getResponse() { return responseAvg; }
-        public double getThroughput() { return throughput; }
-        public double getSimulation() { return endTime; }
-
-        public Tuple<Strategy, int> getKey()
-        {
-            return new Tuple<Strategy, int>(strat, numProcessors);
-        }
-        public void computeAverages(Dictionary<int, ProcessControlBlock> procs)
+        private void computeAverages(Dictionary<int, ProcessControlBlock> procs)
         {
             List<double> avgs = new List<double>();
-
             avgs = Analysis.DisplayAverages(procs);
+
             responseAvg = avgs[0];
             turnAroundAvg = avgs[1];
             startAvg = avgs[2];
@@ -61,6 +41,12 @@ namespace Sim
             burstsPerProcess = avgs[5];
             waitAvg = avgs[6];
         }
+
+        public Tuple<Strategy, int> getKey() //this is used identify the key for the multimap
+        {
+            return new Tuple<Strategy, int>(strat, numProcessors);
+        }
+        
 
         public void outputInfo()
         {
@@ -79,5 +65,19 @@ namespace Sim
 
            // Console.WriteLine("check your documents file for results.txt");
         }
+
+        public void setQuantums(List<int> q)
+        {
+            quantums = q;
+        }
+        //////////////////////////
+        ////// Get Functions//////
+        //////////////////////////
+        public List<int> getQuantum() { return quantums; }
+        public double getTurnaround() { return turnAroundAvg; }
+        public double getWait() { return waitAvg; }
+        public double getResponse() { return responseAvg; }
+        public double getThroughput() { return throughput; }
+        public double getSimulation() { return endTime; }
     }
 }

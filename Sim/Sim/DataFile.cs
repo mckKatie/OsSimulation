@@ -114,16 +114,15 @@ namespace Sim
             {
                 foreach (StrategyInfo si in endInfo)
                 {
-                    outputFile.WriteLine("For runs with balanced cpu and io bursts");
-                    outputFile.WriteLine("For {0} on {1} processor(s):\n", Convert.ToString(si.strat), si.numProcessors);
-                    outputFile.Write("\t Quantum(s): ");
-                    foreach (int i in si.quantums)
+                    outputFile.WriteLine("For {0} on {1} processor(s):\n", si.getStrategy(), si.getNumProcessors());
+                    outputFile.Write("Quantum(s):\t\t\t");
+                    foreach (int i in si.getQuantums())
                     {
-                        outputFile.Write(i + " ");
+                        outputFile.Write(i + "\t");
                     }
-                    outputFile.WriteLine("\n\t Turnaround Time: \t{0}\nWait Time: \t{1} \nSimulation Time: \t{2}\n" +
-                        "Throughput: \t{3}\nResponse Time: \t{4}\nNumber of Runs: \t{5}\n\n", si.turnaroundTime,
-                        si.waitTime, si.simulationTime, si.throughput, si.responseTime, si.numRuns);
+                    outputFile.WriteLine(String.Format("\nTurnaround Time: \t{0:0.000}\nWait Time: \t\t\t{1:0.000} \nSimulation Time: \t{2:0.000}\n" +
+                        "Throughput: \t\t{3:0.000}\nResponse Time: \t\t{4:0.000}\nNumber of Runs: \t{5:0.000}\n\n", si.getTurnaroundTime(),
+                        si.getWaitTime(), si.getSimulationTime(), si.getThroughput(), si.getResponseTime(), si.getNumRuns()));
                 }
             }
         }
